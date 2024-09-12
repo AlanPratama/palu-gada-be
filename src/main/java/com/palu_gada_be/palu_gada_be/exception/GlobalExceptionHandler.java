@@ -1,8 +1,10 @@
 package com.palu_gada_be.palu_gada_be.exception;
 
 import com.palu_gada_be.palu_gada_be.util.ErrorResponse;
+import io.jsonwebtoken.ExpiredJwtException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -56,5 +58,29 @@ public class GlobalExceptionHandler {
                 .build();
 
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<ErrorResponse<String>> handleAccessDeniedException(AccessDeniedException ex) {
+        ErrorResponse<String> errorResponse = ErrorResponse.<String>builder()
+                .statusCode(String.valueOf(HttpStatus.FORBIDDEN.value()))
+                .statusText(HttpStatus.FORBIDDEN.getReasonPhrase())
+                .message("You do not have permission to access this resource")
+                .errors(Collections.singletonList("Access Denied"))
+                .build();
+
+        return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
+    }
+
+    @ExceptionHandler(ExpiredJwtException.class)
+    public ResponseEntity<ErrorResponse<String>> handleExpiredJwtException(ExpiredJwtException ex) {
+        ErrorResponse<String> errorResponse = ErrorResponse.<String>builder()
+                .statusCode(String.valueOf(HttpStatus.UNAUTHORIZED.value()))
+                .statusText(HttpStatus.UNAUTHORIZED.getReasonPhrase())
+                .message("Your session has expired. Please login again.")
+                .errors(Collections.singletonList("JWT Token Expired"))
+                .build();
+
+        return new ResponseEntity<>(errorResponse, HttpStatus.UNAUTHORIZED);
     }
 }

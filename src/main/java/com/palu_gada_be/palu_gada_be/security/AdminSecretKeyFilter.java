@@ -13,24 +13,16 @@ import java.io.IOException;
 
 @Component
 public class AdminSecretKeyFilter extends OncePerRequestFilter {
-    private static final String ADMIN_EXPECTED_SECRET_KEY = "zul bhayangkara alan birahi tomy semut hadiat hepatitis";
+    private static final String ADMIN_EXPECTED_SECRET_KEY = "zul customer alan login tomy semut hadiat autentikasi";
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String path = request.getRequestURI();
         String adminKey = request.getHeader("X-Admin-Secret-Key");
 
-        // Cek untuk endpoint yang memerlukan Admin Secret Key
-        if (path.startsWith("/api/admin/users/")) {
+        if (path.startsWith("/api/v1/auth/create-admin")) {
             if (adminKey == null || !adminKey.equals(ADMIN_EXPECTED_SECRET_KEY)) {
                 response.sendError(HttpStatus.FORBIDDEN.value(), "Invalid Admin Secret Key");
-                return;
-            }
-
-            // Cek otorisasi untuk memastikan pengguna memiliki peran SUPER_ADMIN
-            var authentication = SecurityContextHolder.getContext().getAuthentication();
-            if (authentication == null || !authentication.getAuthorities().stream().anyMatch(auth -> auth.getAuthority().equals("ROLE_SUPER_ADMIN"))) {
-                response.sendError(HttpStatus.FORBIDDEN.value(), "Access Denied");
                 return;
             }
         }
