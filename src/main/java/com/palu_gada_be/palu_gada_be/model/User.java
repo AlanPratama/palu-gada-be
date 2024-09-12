@@ -2,7 +2,6 @@ package com.palu_gada_be.palu_gada_be.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.palu_gada_be.palu_gada_be.constant.ConstantTable;
-import com.palu_gada_be.palu_gada_be.constant.TransactionStatus;
 import com.palu_gada_be.palu_gada_be.constant.UserGender;
 import jakarta.persistence.*;
 import lombok.*;
@@ -12,10 +11,9 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 @Getter
 @Setter
@@ -34,13 +32,13 @@ public class User implements UserDetails {
     @JoinColumn(name = "districtId")
     private District district;
 
-    @Column(name = "name", nullable = false)
+    @Column(name = "name", nullable = true)
     private String name;
 
-    @Column(name = "phone", nullable = false)
+    @Column(name = "phone", nullable = true)
     private String phone;
 
-    @Column(name = "email", nullable = false)
+    @Column(name = "email", nullable = true)
     private String email;
 
     @Column(name = "username", nullable = false)
@@ -49,20 +47,20 @@ public class User implements UserDetails {
     @Column(name = "password", nullable = false)
     private String password;
 
-    @Column(name = "address", nullable = false)
+    @Column(name = "address")
     private String address;
 
-    @Column(name = "balance", nullable = false)
+    @Column(name = "balance")
     private Long balance;
 
-    @Column(name = "photoUrl", nullable = true)
+    @Column(name = "photoUrl")
     private String photoUrl;
 
     @Column(name = "birthDate")
     private String birthDate;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "gender", nullable = false)
+    @Column(name = "gender", nullable = true)
     private UserGender userGender;
 
     @OneToMany(mappedBy = "user")
@@ -80,6 +78,14 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "user")
     @JsonIgnore
     private List<Post> posts = new ArrayList<>();
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "user_roles",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id")
+    )
+    private Set<Role> roles = new HashSet<>();
 
     @CreatedDate
     @Column(name = "createdAt", updatable = false)
