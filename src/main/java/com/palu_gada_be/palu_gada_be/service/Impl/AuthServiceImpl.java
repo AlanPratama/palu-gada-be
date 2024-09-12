@@ -23,7 +23,7 @@ import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
-public class AuthImpl implements AuthService {
+public class AuthServiceImpl implements AuthService {
 
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;

@@ -1,5 +1,6 @@
 package com.palu_gada_be.palu_gada_be.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.palu_gada_be.palu_gada_be.constant.ConstantTable;
 import jakarta.persistence.*;
 import lombok.*;
@@ -18,9 +19,6 @@ public class Role {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, unique = true)
+    @Column(unique = true, nullable = false)
     private String name;
-
-    @ManyToMany(mappedBy = "roles")
-    private Set<User> users;
 }

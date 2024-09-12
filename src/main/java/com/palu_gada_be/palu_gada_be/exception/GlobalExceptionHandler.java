@@ -1,7 +1,6 @@
 package com.palu_gada_be.palu_gada_be.exception;
 
 import com.palu_gada_be.palu_gada_be.util.ErrorResponse;
-import org.apache.coyote.BadRequestException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;

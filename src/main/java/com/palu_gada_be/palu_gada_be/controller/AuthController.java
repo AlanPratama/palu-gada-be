@@ -1,5 +1,6 @@
 package com.palu_gada_be.palu_gada_be.controller;
 
+import com.palu_gada_be.palu_gada_be.constant.ConstantEndpoint;
 import com.palu_gada_be.palu_gada_be.dto.request.auth.AuthenticationRequest;
 import com.palu_gada_be.palu_gada_be.dto.request.auth.RefreshTokenRequest;
 import com.palu_gada_be.palu_gada_be.dto.request.auth.RegisterRequest;
@@ -15,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/v1/auth")
+@RequestMapping(ConstantEndpoint.AUTH_API)
 @RequiredArgsConstructor
 public class AuthController {
     private final AuthService authService;

@@ -1,5 +1,6 @@
 package com.palu_gada_be.palu_gada_be.configuration;
 
+import com.palu_gada_be.palu_gada_be.security.AdminSecretKeyFilter;
 import com.palu_gada_be.palu_gada_be.security.JwtAuthenticationFilter;
 import com.palu_gada_be.palu_gada_be.security.UserSecurity;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +20,7 @@ public class SecurityConfig{
 
     private final JwtAuthenticationFilter jwtAuthFilter;
     private final AuthenticationProvider authenticationProvider;
+    private final AdminSecretKeyFilter adminSecretKeyFilter;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
@@ -26,13 +28,16 @@ public class SecurityConfig{
                 .csrf().disable()
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/v1/auth/**").permitAll()
+                        .requestMatchers("/api/v1/admin/**").hasAuthority("ROLE_ADMIN")
+                        .requestMatchers("/test").hasAuthority("ROLE_ADMIN")
                         .anyRequest().authenticated()
                 )
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authenticationProvider(authenticationProvider)
-                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(adminSecretKeyFilter, UsernamePasswordAuthenticationFilter.class);
         return httpSecurity.build();
     }
 }
