@@ -1,7 +1,6 @@
 package com.palu_gada_be.palu_gada_be.service.Impl;
 
 import com.palu_gada_be.palu_gada_be.dto.request.auth.RegisterRequest;
-import com.palu_gada_be.palu_gada_be.dto.response.auth.UserRegisterResponse;
 import com.palu_gada_be.palu_gada_be.model.Role;
 import com.palu_gada_be.palu_gada_be.model.User;
 import com.palu_gada_be.palu_gada_be.repository.RoleRepository;
@@ -68,6 +67,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void deleteById(Long id) {
-        userRepository.deleteById(id);
+        userRepository.delete(getById(id));
     }
 }

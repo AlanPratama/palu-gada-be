@@ -48,5 +48,16 @@ public class UserController {
         );
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteById(
+            @PathVariable Long id
+    ) {
+        userService.deleteById(id);
+        return Response.renderJSON(
+                id,
+                "Success Delete User"
+        );
+    }
+
 
 }
