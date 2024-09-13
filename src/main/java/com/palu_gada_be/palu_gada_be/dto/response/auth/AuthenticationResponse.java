@@ -2,6 +2,8 @@ package com.palu_gada_be.palu_gada_be.dto.response.auth;
 
 import lombok.*;
 
+import java.util.Collection;
+
 @Setter
 @Getter
 @Builder
@@ -10,4 +12,5 @@ import lombok.*;
 public class AuthenticationResponse {
     private String accessToken;
     private String refreshToken;
+    private Collection authorities;
 }
