@@ -83,7 +83,7 @@ public class PostServiceImpl implements PostService {
                 .budgetMin(request.getBudgetMin())
                 .budgetMax(request.getBudgetMax())
                 .finishDay(request.getFinishDay())
-                .postStatus(PostStatus.valueOf(request.getStatus()))
+                .postStatus(PostStatus.AVAILABLE)
                 .imageUrl(request.getImageUrl())
                 .build();
 

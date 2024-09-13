@@ -15,6 +15,6 @@ public class PostRequest {
     private Long budgetMax;
     private String deadline;
     private Long finishDay;
-    private String status;
+    private Boolean isUrgent;
     private String imageUrl;
 }

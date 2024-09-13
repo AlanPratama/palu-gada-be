@@ -57,7 +57,10 @@ public class Post {
     @Column(name = "status", nullable = false)
     private PostStatus postStatus;
 
-    @Column(name = "imageUrl", nullable = false)
+    @Column(name = "isUrgent")
+    private Boolean isUrgent;
+
+    @Column(name = "imageUrl")
     private String imageUrl;
 
     @OneToMany(mappedBy = "post")
