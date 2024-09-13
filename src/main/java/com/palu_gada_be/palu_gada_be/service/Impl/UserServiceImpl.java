@@ -56,7 +56,6 @@ public class UserServiceImpl implements UserService {
                 .build();
 
         User createdNewUser = userRepository.save(user);
-
         return createdNewUser;
     }
 

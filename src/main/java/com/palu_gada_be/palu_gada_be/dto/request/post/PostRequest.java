@@ -8,9 +8,8 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 public class PostRequest {
-    private Long userId;
     private Long districtId;
-    private String string;
+    private String title;
     private String description;
     private Long budgetMin;
     private Long budgetMax;

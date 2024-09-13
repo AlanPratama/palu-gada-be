@@ -1,4 +1,4 @@
-package com.palu_gada_be.palu_gada_be.controller;
+package com.palu_gada_be.palu_gada_be.controller.Admin;
 
 import com.palu_gada_be.palu_gada_be.constant.ConstantEndpoint;
 import com.palu_gada_be.palu_gada_be.dto.request.category.CategoryRequest;
@@ -13,9 +13,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping(ConstantEndpoint.CATEGORY_API)
+@RequestMapping(ConstantEndpoint.ADMIN_CATEGORY_API)
 @RequiredArgsConstructor
-public class CategoryController {
+public class AdminCategoryController {
 
     private final CategoryService categoryService;
 

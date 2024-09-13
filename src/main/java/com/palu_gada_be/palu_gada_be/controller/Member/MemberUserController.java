@@ -1,4 +1,4 @@
-package com.palu_gada_be.palu_gada_be.controller;
+package com.palu_gada_be.palu_gada_be.controller.Member;
 
 import com.palu_gada_be.palu_gada_be.constant.ConstantEndpoint;
 import com.palu_gada_be.palu_gada_be.dto.request.user.ResetPasswordRequest;
@@ -10,9 +10,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping(ConstantEndpoint.MEMBER_API)
+@RequestMapping(ConstantEndpoint.MEMBER_USER_API)
 @RequiredArgsConstructor
-public class MemberController {
+public class MemberUserController {
 
     private final MemberService memberService;
 

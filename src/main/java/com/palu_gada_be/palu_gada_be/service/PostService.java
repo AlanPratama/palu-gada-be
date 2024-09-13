@@ -8,7 +8,8 @@ import org.springframework.data.domain.Pageable;
 public interface PostService {
     Post create(PostRequest request);
     Page<Post> getAll(Pageable pageable);
+    Page<Post> getAllByUserId(Pageable pageable);
     Post getById(Long id);
-    Post update(Long id, PostRequest request);
+    Post updateById(Long id, PostRequest request);
     void deleteById(Long id);
 }
