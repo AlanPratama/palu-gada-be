@@ -26,6 +26,7 @@ public class PostCategory {
     private Long id;
 
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "postId")
     private Post post;
 

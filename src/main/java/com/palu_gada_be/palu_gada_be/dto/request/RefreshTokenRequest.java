@@ -1,4 +1,4 @@
-package com.palu_gada_be.palu_gada_be.dto.request.auth;
+package com.palu_gada_be.palu_gada_be.dto.request;
 
 import lombok.Data;
 

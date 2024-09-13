@@ -1,7 +1,7 @@
 package com.palu_gada_be.palu_gada_be.controller.Admin;
 
 import com.palu_gada_be.palu_gada_be.constant.ConstantEndpoint;
-import com.palu_gada_be.palu_gada_be.dto.request.auth.RegisterRequest;
+import com.palu_gada_be.palu_gada_be.dto.request.RegisterRequest;
 import com.palu_gada_be.palu_gada_be.service.UserService;
 import com.palu_gada_be.palu_gada_be.util.PageResponse;
 import com.palu_gada_be.palu_gada_be.util.Response;

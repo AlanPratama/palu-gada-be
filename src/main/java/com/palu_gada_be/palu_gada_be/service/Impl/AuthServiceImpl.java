@@ -1,11 +1,11 @@
 package com.palu_gada_be.palu_gada_be.service.Impl;
 
-import com.palu_gada_be.palu_gada_be.dto.request.auth.AuthenticationRequest;
-import com.palu_gada_be.palu_gada_be.dto.request.auth.RefreshTokenRequest;
-import com.palu_gada_be.palu_gada_be.dto.request.auth.RegisterRequest;
-import com.palu_gada_be.palu_gada_be.dto.response.auth.AuthenticationResponse;
-import com.palu_gada_be.palu_gada_be.dto.response.auth.RefreshTokenResponse;
-import com.palu_gada_be.palu_gada_be.dto.response.auth.UserRegisterResponse;
+import com.palu_gada_be.palu_gada_be.dto.request.AuthenticationRequest;
+import com.palu_gada_be.palu_gada_be.dto.request.RefreshTokenRequest;
+import com.palu_gada_be.palu_gada_be.dto.request.RegisterRequest;
+import com.palu_gada_be.palu_gada_be.dto.response.AuthenticationResponse;
+import com.palu_gada_be.palu_gada_be.dto.response.RefreshTokenResponse;
+import com.palu_gada_be.palu_gada_be.dto.response.UserRegisterResponse;
 import com.palu_gada_be.palu_gada_be.model.Role;
 import com.palu_gada_be.palu_gada_be.model.User;
 import com.palu_gada_be.palu_gada_be.repository.RoleRepository;
@@ -18,7 +18,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;

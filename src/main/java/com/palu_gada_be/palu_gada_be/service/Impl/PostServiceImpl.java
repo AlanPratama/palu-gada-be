@@ -1,13 +1,16 @@
 package com.palu_gada_be.palu_gada_be.service.Impl;
 
 import com.palu_gada_be.palu_gada_be.constant.PostStatus;
-import com.palu_gada_be.palu_gada_be.dto.request.post.PostRequest;
+import com.palu_gada_be.palu_gada_be.dto.request.PostRequest;
 import com.palu_gada_be.palu_gada_be.model.District;
 import com.palu_gada_be.palu_gada_be.model.Post;
+import com.palu_gada_be.palu_gada_be.model.PostCategory;
 import com.palu_gada_be.palu_gada_be.model.User;
 import com.palu_gada_be.palu_gada_be.repository.PostRepository;
 import com.palu_gada_be.palu_gada_be.security.JwtService;
+import com.palu_gada_be.palu_gada_be.service.CategoryService;
 import com.palu_gada_be.palu_gada_be.service.DistrictService;
+import com.palu_gada_be.palu_gada_be.service.PostCategoryService;
 import com.palu_gada_be.palu_gada_be.service.PostService;
 import com.palu_gada_be.palu_gada_be.util.DateTimeUtil;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +20,8 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -25,6 +30,8 @@ public class PostServiceImpl implements PostService {
     private final PostRepository postRepository;
     private final DistrictService districtService;
     private final JwtService jwtService;
+    private final PostCategoryService postCategoryService;
+    private final CategoryService categoryService;
 
     @Override
     public Post create(PostRequest request) {
@@ -50,6 +57,24 @@ public class PostServiceImpl implements PostService {
                 .postStatus(PostStatus.AVAILABLE)
                 .imageUrl(request.getImageUrl())
                 .build();
+
+        Post post = postRepository.save(newPost);
+        List<PostCategory> postCategories = new ArrayList<>();
+
+        try {
+            for (var c : request.getCategoriesId()){
+                PostCategory temp = PostCategory.builder()
+                        .category(categoryService.getById(c))
+                        .post(post)
+                        .build();
+                postCategories.add(temp);
+            }
+            postCategoryService.createAll(postCategories);
+        } catch (Exception ex){
+            throw new RuntimeException("Error creating post");
+        }
+
+        newPost.setPostCategories(postCategories);
 
         return postRepository.save(newPost);
     }

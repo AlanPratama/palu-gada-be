@@ -1,6 +1,6 @@
 package com.palu_gada_be.palu_gada_be.service.Impl;
 
-import com.palu_gada_be.palu_gada_be.dto.request.district.DistrictRequest;
+import com.palu_gada_be.palu_gada_be.dto.request.DistrictRequest;
 import com.palu_gada_be.palu_gada_be.model.District;
 import com.palu_gada_be.palu_gada_be.repository.DistrictRepository;
 import com.palu_gada_be.palu_gada_be.service.DistrictService;

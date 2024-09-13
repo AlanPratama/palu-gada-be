@@ -1,9 +1,8 @@
 package com.palu_gada_be.palu_gada_be.controller.Admin;
 
 import com.palu_gada_be.palu_gada_be.constant.ConstantEndpoint;
-import com.palu_gada_be.palu_gada_be.dto.request.post.PostRequest;
+import com.palu_gada_be.palu_gada_be.dto.request.PostRequest;
 import com.palu_gada_be.palu_gada_be.service.PostService;
-import com.palu_gada_be.palu_gada_be.service.UserService;
 import com.palu_gada_be.palu_gada_be.util.PageResponse;
 import com.palu_gada_be.palu_gada_be.util.Response;
 import lombok.RequiredArgsConstructor;
@@ -49,6 +48,18 @@ public class AdminPostController {
         return Response.renderJSON(
             postService.getById(id),
             "Success Get Post",
+            HttpStatus.OK
+        );
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<?> update(
+        @PathVariable Long id,
+        @RequestBody PostRequest request
+    ) {
+        return Response.renderJSON(
+            postService.updateById(id, request),
+            "Success Update Post",
             HttpStatus.OK
         );
     }

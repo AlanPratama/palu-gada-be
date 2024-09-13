@@ -1,6 +1,6 @@
 package com.palu_gada_be.palu_gada_be.service.Impl;
 
-import com.palu_gada_be.palu_gada_be.dto.request.auth.RegisterRequest;
+import com.palu_gada_be.palu_gada_be.dto.request.RegisterRequest;
 import com.palu_gada_be.palu_gada_be.model.Role;
 import com.palu_gada_be.palu_gada_be.model.User;
 import com.palu_gada_be.palu_gada_be.repository.RoleRepository;

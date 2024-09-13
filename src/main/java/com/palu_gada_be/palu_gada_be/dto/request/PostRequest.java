@@ -1,6 +1,8 @@
-package com.palu_gada_be.palu_gada_be.dto.request.post;
+package com.palu_gada_be.palu_gada_be.dto.request;
 
 import lombok.*;
+
+import java.util.List;
 
 @Setter
 @Getter
@@ -14,6 +16,7 @@ public class PostRequest {
     private Long budgetMin;
     private Long budgetMax;
     private String deadline;
+    private List<Long> categoriesId;
     private Long finishDay;
     private Boolean isUrgent;
     private String imageUrl;

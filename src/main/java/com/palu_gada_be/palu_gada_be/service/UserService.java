@@ -1,6 +1,6 @@
 package com.palu_gada_be.palu_gada_be.service;
 
-import com.palu_gada_be.palu_gada_be.dto.request.auth.RegisterRequest;
+import com.palu_gada_be.palu_gada_be.dto.request.RegisterRequest;
 import com.palu_gada_be.palu_gada_be.model.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

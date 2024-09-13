@@ -1,6 +1,6 @@
 package com.palu_gada_be.palu_gada_be.service.Impl;
 
-import com.palu_gada_be.palu_gada_be.dto.request.category.CategoryRequest;
+import com.palu_gada_be.palu_gada_be.dto.request.CategoryRequest;
 import com.palu_gada_be.palu_gada_be.model.Category;
 import com.palu_gada_be.palu_gada_be.repository.CategoryRepository;
 import com.palu_gada_be.palu_gada_be.service.CategoryService;

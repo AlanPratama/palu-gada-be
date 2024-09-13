@@ -64,7 +64,6 @@ public class Post {
     private String imageUrl;
 
     @OneToMany(mappedBy = "post")
-    @JsonIgnore
     private List<PostCategory> postCategories = new ArrayList<>();
 
     @CreatedDate

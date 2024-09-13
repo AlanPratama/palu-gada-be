@@ -1,4 +1,4 @@
-package com.palu_gada_be.palu_gada_be.dto.response.auth;
+package com.palu_gada_be.palu_gada_be.dto.response;
 
 import lombok.*;
 
