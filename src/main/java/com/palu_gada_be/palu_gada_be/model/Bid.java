@@ -28,10 +28,12 @@ public class Bid {
     private Long id;
 
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "userId")
     private User user;
 
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "postId")
     private Post post;
 

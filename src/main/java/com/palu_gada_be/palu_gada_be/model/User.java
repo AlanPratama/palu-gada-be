@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.palu_gada_be.palu_gada_be.constant.ConstantTable;
 import com.palu_gada_be.palu_gada_be.constant.UserGender;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -53,6 +54,7 @@ public class User implements UserDetails {
     private String address;
 
     @Column(name = "balance")
+    @Min(value = 0, message = "Balance must be at least 0")
     private Long balance;
 
     @Column(name = "photoUrl")

@@ -68,14 +68,16 @@ public class PostServiceImpl implements PostService {
         List<PostCategory> postCategories = new ArrayList<>();
 
         try {
-            for (var c : request.getCategoriesId()){
-                PostCategory temp = PostCategory.builder()
-                        .category(categoryService.getById(c))
-                        .post(post)
-                        .build();
-                postCategories.add(temp);
+            if (request.getCategoriesId() != null){
+                for (var c : request.getCategoriesId()){
+                    PostCategory temp = PostCategory.builder()
+                            .category(categoryService.getById(c))
+                            .post(post)
+                            .build();
+                    postCategories.add(temp);
+                }
+                postCategoryService.createAll(postCategories);
             }
-            postCategoryService.createAll(postCategories);
         } catch (Exception ex){
             throw new RuntimeException("Error creating post");
         }

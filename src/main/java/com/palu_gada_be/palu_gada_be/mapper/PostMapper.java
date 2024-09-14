@@ -8,21 +8,22 @@ import java.util.stream.Collectors;
 
 @Data
 public class PostMapper {
-    public static PostResponse toPostResponse(Post newPost) {
+    public static PostResponse toPostResponse(Post post) {
         return PostResponse.builder()
-                .id(newPost.getId())
-                .user(UserMapper.toUserResponse(newPost.getUser()))
-                .district(DistrictMapper.toDistrictResponse(newPost.getDistrict()))
-                .title(newPost.getTitle())
-                .description(newPost.getDescription())
-                .budgetMin(newPost.getBudgetMin())
-                .budgetMax(newPost.getBudgetMax())
-                .deadline(newPost.getPostDeadline().toString())
-                .finishDay(newPost.getFinishDay())
-                .status(newPost.getPostStatus().toString())
-                .isUrgent(newPost.getIsUrgent())
-                .imageUrl(newPost.getImageUrl())
-                .postCategories(newPost.getPostCategories().stream().map(PostCategoryMapper::toPostCategoryResponse).collect(Collectors.toList()))
+                .id(post.getId())
+                .user(UserMapper.toUserResponse(post.getUser()))
+                .district(DistrictMapper.toDistrictResponse(post.getDistrict()))
+                .title(post.getTitle())
+                .description(post.getDescription())
+                .budgetMin(post.getBudgetMin())
+                .budgetMax(post.getBudgetMax())
+                .deadline(post.getPostDeadline().toString())
+                .finishDay(post.getFinishDay())
+                .status(post.getPostStatus().toString())
+                .isUrgent(post.getIsUrgent())
+                .imageUrl(post.getImageUrl())
+                .postCategories(post.getPostCategories().stream().map(PostCategoryMapper::toPostCategoryResponse).collect(Collectors.toList()))
+                .bids(post.getBids())
                 .build();
     }
 }

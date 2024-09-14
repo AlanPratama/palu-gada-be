@@ -11,7 +11,7 @@ public interface BidService {
     Page<BidResponse> getAll(Pageable pageable);
     Page<BidResponse> getAllByUserId(Pageable pageable);
     Page<BidResponse> getAllByPostId(Long id, Pageable pageable);
-    BidResponse changeStatusById(Long id, String status);
+    BidResponse updateStatusById(Long id, String status);
     Bid findById(Long id);
     BidResponse getById(Long id);
     void deleteById(Long id);

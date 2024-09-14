@@ -30,17 +30,6 @@ public class AdminPostController {
         );
     }
 
-    @PostMapping
-    public ResponseEntity<?> create(
-        @RequestBody PostRequest request
-    ) {
-        return Response.renderJSON(
-            postService.create(request),
-            "Success Create Post",
-            HttpStatus.CREATED
-        );
-    }
-
     @GetMapping("/{id}")
     public ResponseEntity<?> getById(
         @PathVariable Long id

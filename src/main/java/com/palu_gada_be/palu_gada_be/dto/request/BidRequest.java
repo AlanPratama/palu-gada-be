@@ -9,9 +9,7 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 public class BidRequest {
-    private Long userId;
     private Long postId;
     private Long amount;
     private String message;
-    private BidStatus status;
 }

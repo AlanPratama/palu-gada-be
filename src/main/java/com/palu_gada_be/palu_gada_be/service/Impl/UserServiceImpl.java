@@ -1,6 +1,7 @@
 package com.palu_gada_be.palu_gada_be.service.Impl;
 
 import com.palu_gada_be.palu_gada_be.dto.request.RegisterRequest;
+import com.palu_gada_be.palu_gada_be.dto.request.UpdateBalanceRequest;
 import com.palu_gada_be.palu_gada_be.dto.response.UserResponse;
 import com.palu_gada_be.palu_gada_be.mapper.UserMapper;
 import com.palu_gada_be.palu_gada_be.model.Role;
@@ -13,6 +14,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -74,6 +76,19 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserResponse updateById(Long id, User user) {
         return null;
+    }
+
+    @Override
+    @Transactional
+    public User updateBalance(Long id, Long amount) {
+        User user = findById(id);
+        try {
+            user.setBalance(user.getBalance() + amount);
+            userRepository.save(user);
+        } catch (Exception ex){
+            throw ex;
+        }
+        return user;
     }
 
     @Override

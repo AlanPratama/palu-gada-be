@@ -1,7 +1,6 @@
 package com.palu_gada_be.palu_gada_be.controller.Admin;
 
 import com.palu_gada_be.palu_gada_be.constant.ConstantEndpoint;
-import com.palu_gada_be.palu_gada_be.dto.request.BidRequest;
 import com.palu_gada_be.palu_gada_be.service.BidService;
 import com.palu_gada_be.palu_gada_be.util.PageResponse;
 import com.palu_gada_be.palu_gada_be.util.Response;
@@ -49,7 +48,7 @@ public class AdminBidController {
     @PatchMapping("/{id}/status")
     public ResponseEntity<?> updateBidStatus(@PathVariable Long id, @RequestParam String status) {
         return Response.renderJSON(
-                bidService.changeStatusById(id, status),
+                bidService.updateStatusById(id, status),
                 "Success Change Bid Status",
                 HttpStatus.OK
         );

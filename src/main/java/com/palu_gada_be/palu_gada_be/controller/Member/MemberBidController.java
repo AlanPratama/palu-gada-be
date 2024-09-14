@@ -49,7 +49,7 @@ public class MemberBidController {
     @PatchMapping("/{id}/{status}")
     public ResponseEntity<?> changeBidStatus(@PathVariable Long id, @RequestParam String status) {
         return Response.renderJSON(
-                bidService.changeStatusById(id, status),
+                bidService.updateStatusById(id, status),
                 "Success Change Bid Status",
                 HttpStatus.OK
         );
