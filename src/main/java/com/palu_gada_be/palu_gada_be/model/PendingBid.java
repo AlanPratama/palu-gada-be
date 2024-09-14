@@ -1,5 +1,6 @@
 package com.palu_gada_be.palu_gada_be.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.palu_gada_be.palu_gada_be.constant.ConstantTable;
 import jakarta.persistence.*;
 import lombok.*;
@@ -26,6 +27,7 @@ public class PendingBid {
     private Long balance;
 
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "bidId")
     private Bid bid;
 

@@ -1,6 +1,8 @@
 package com.palu_gada_be.palu_gada_be.service.Impl;
 
 import com.palu_gada_be.palu_gada_be.dto.request.RegisterRequest;
+import com.palu_gada_be.palu_gada_be.dto.response.UserResponse;
+import com.palu_gada_be.palu_gada_be.mapper.UserMapper;
 import com.palu_gada_be.palu_gada_be.model.Role;
 import com.palu_gada_be.palu_gada_be.model.User;
 import com.palu_gada_be.palu_gada_be.repository.RoleRepository;
@@ -24,19 +26,29 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder passwordEncoder;
 
     @Override
-    public Page<User> getAll(Pageable pageable) {
-        return userRepository.findAll(pageable);
+    public Page<UserResponse> getAll(Pageable pageable) {
+        Page<User> users = userRepository.findAll(pageable);
+        return users.map(UserMapper::toUserResponse);
     }
 
     @Override
-    public User getById(Long id) {
+    public UserResponse getById(Long id) {
+        User user = userRepository.findById(id).orElseThrow(
+            () -> new RuntimeException("Post not Found")
+        );
+
+        return UserMapper.toUserResponse(user);
+    }
+
+    @Override
+    public User findById(Long id) {
         return userRepository.findById(id).orElseThrow(
-                () -> new RuntimeException("User not found")
+            () -> new RuntimeException("User Not Found")
         );
     }
 
     @Override
-    public User createAdmin(RegisterRequest request) {
+    public UserResponse createAdmin(RegisterRequest request) {
         if (userRepository.findByUsernameOrEmail(request.getUsername(), request.getEmail()).isPresent()) {
             throw new RuntimeException("User already exist");
         }
@@ -55,17 +67,17 @@ public class UserServiceImpl implements UserService {
                 .roles(new HashSet<>(Set.of(userRole)))
                 .build();
 
-        User createdNewUser = userRepository.save(user);
-        return createdNewUser;
+        User newCreatedAdmin = userRepository.save(user);
+        return UserMapper.toUserResponse(newCreatedAdmin);
     }
 
     @Override
-    public User updateById(Long id, User user) {
+    public UserResponse updateById(Long id, User user) {
         return null;
     }
 
     @Override
     public void deleteById(Long id) {
-        userRepository.delete(getById(id));
+        userRepository.delete(findById(id));
     }
 }

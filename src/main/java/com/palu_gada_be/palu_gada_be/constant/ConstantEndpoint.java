@@ -6,10 +6,12 @@ public class ConstantEndpoint {
     /* MEMBER ENDPOINT */
     public static final String MEMBER_USER_API = "/api/v1/users";
     public static final String MEMBER_POST_API = "/api/v1/posts";
+    public static final String MEMBER_BID_API = "/api/v1/bids";
 
     /* ADMIN ENDPOINT */
     public static final String ADMIN_USER_API = "/api/v1/admin/users";
     public static final String ADMIN_CATEGORY_API = "/api/v1/admin/categories";
     public static final String ADMIN_DISTRICT_API = "/api/v1/admin/districts";
     public static final String ADMIN_POST_API = "/api/v1/admin/posts";
+    public static final String ADMIN_BID_API = "/api/v1/admin/bids";
 }

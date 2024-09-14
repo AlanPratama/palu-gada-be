@@ -2,6 +2,10 @@ package com.palu_gada_be.palu_gada_be.service.Impl;
 
 import com.palu_gada_be.palu_gada_be.constant.PostStatus;
 import com.palu_gada_be.palu_gada_be.dto.request.PostRequest;
+import com.palu_gada_be.palu_gada_be.dto.response.DistrictResponse;
+import com.palu_gada_be.palu_gada_be.dto.response.PostResponse;
+import com.palu_gada_be.palu_gada_be.dto.response.UserResponse;
+import com.palu_gada_be.palu_gada_be.mapper.PostMapper;
 import com.palu_gada_be.palu_gada_be.model.District;
 import com.palu_gada_be.palu_gada_be.model.Post;
 import com.palu_gada_be.palu_gada_be.model.PostCategory;
@@ -17,6 +21,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
@@ -34,7 +39,8 @@ public class PostServiceImpl implements PostService {
     private final CategoryService categoryService;
 
     @Override
-    public Post create(PostRequest request) {
+    @Transactional
+    public PostResponse create(PostRequest request) {
         User user = jwtService.getUserAuthenticated();
         District district = districtService.getById(request.getDistrictId());
 
@@ -75,48 +81,62 @@ public class PostServiceImpl implements PostService {
         }
 
         newPost.setPostCategories(postCategories);
+        postRepository.save(newPost);
 
-        return postRepository.save(newPost);
+        return PostMapper.toPostResponse(newPost);
     }
 
     @Override
-    public Page<Post> getAll(Pageable pageable) {
-        return postRepository.findAll(pageable);
+    public Page<PostResponse> getAll(Pageable pageable) {
+        Page<Post> posts = postRepository.findAll(pageable);
+
+        return posts.map(PostMapper::toPostResponse);
     }
 
     @Override
-    public Page<Post> getAllByUserId(Pageable pageable) {
+    public Page<PostResponse> getAllByUserId(Pageable pageable) {
         Long id = jwtService.getUserAuthenticated().getId();
-        return postRepository.findByUserId(id, pageable);
+        Page<Post> posts = postRepository.findByUserId(id, pageable);
+
+        return posts.map(PostMapper::toPostResponse);
     }
 
     @Override
-    public Post getById(Long id) {
-        return postRepository.findById(id).orElseThrow(
+    public PostResponse getById(Long id) {
+        Post post = postRepository.findById(id).orElseThrow(
                 () -> new RuntimeException("Post not Found")
         );
+
+        return PostMapper.toPostResponse(post);
     }
 
     @Override
+    public Post findById(Long id) {
+        return postRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Post not found with id " + id));
+    }
+
+    @Override
+    @Transactional
     public Post updateById(Long id, PostRequest request) {
-        District newDistrict = districtService.getById(id);
+        Post existingPost = findById(id);
 
-        Post updatePost = Post.builder()
-                .district(newDistrict)
-                .title(request.getTitle())
-                .description(request.getDescription())
-                .budgetMin(request.getBudgetMin())
-                .budgetMax(request.getBudgetMax())
-                .finishDay(request.getFinishDay())
-                .postStatus(PostStatus.AVAILABLE)
-                .imageUrl(request.getImageUrl())
-                .build();
+        District newDistrict = districtService.getById(request.getDistrictId());
 
-        return postRepository.save(updatePost);
+        existingPost.setDistrict(newDistrict);
+        existingPost.setTitle(request.getTitle());
+        existingPost.setDescription(request.getDescription());
+        existingPost.setBudgetMin(request.getBudgetMin());
+        existingPost.setBudgetMax(request.getBudgetMax());
+        existingPost.setFinishDay(request.getFinishDay());
+        existingPost.setPostStatus(PostStatus.AVAILABLE);
+        existingPost.setImageUrl(request.getImageUrl());
+
+        return postRepository.save(existingPost);
     }
 
     @Override
     public void deleteById(Long id) {
-        postRepository.delete(getById(id));
+        postRepository.delete(findById(id));
     }
 }

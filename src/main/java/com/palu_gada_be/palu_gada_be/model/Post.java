@@ -66,6 +66,9 @@ public class Post {
     @OneToMany(mappedBy = "post")
     private List<PostCategory> postCategories = new ArrayList<>();
 
+    @OneToMany(mappedBy = "post")
+    private List<Bid> bids = new ArrayList<>();
+
     @CreatedDate
     @Column(name = "createdAt", updatable = false)
     private LocalDateTime createdAt;
