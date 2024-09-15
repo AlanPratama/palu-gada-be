@@ -31,6 +31,7 @@ public class SecurityConfig{
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
                 .cors()
+                .configurationSource(corsConfigurationSource())
                 .and()
                 .csrf().disable()
                 .authorizeHttpRequests(auth -> auth
@@ -53,7 +54,7 @@ public class SecurityConfig{
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(List.of("http://localhost:5173", "http://localhost:8081"));
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-        configuration.setAllowedHeaders(List.of("Authorization", "Cache-Control", "Content-Type", "X-Admin-Secret-Key", "Authorization"));
+        configuration.setAllowedHeaders(List.of("Authorization", "Cache-Control", "Content-Type", "X-Admin-Secret-Key"));
         configuration.setExposedHeaders(List.of("Authorization"));
         configuration.setAllowCredentials(true);
 
