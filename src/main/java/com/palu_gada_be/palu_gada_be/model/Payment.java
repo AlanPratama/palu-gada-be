@@ -1,7 +1,8 @@
 package com.palu_gada_be.palu_gada_be.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.palu_gada_be.palu_gada_be.constant.ConstantTable;
-import com.palu_gada_be.palu_gada_be.constant.TransactionStatus;
+import com.palu_gada_be.palu_gada_be.constant.PaymentStatus;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
@@ -24,6 +25,7 @@ public class Payment {
     private Long id;
 
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "userId")
     private User user;
 
@@ -50,7 +52,7 @@ public class Payment {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
-    private TransactionStatus transactionStatus;
+    private PaymentStatus paymentStatus;
 
     @CreatedDate
     @Column(name = "createdAt", updatable = false)

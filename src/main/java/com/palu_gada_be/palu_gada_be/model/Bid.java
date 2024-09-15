@@ -3,7 +3,6 @@ package com.palu_gada_be.palu_gada_be.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.palu_gada_be.palu_gada_be.constant.BidStatus;
 import com.palu_gada_be.palu_gada_be.constant.ConstantTable;
-import com.palu_gada_be.palu_gada_be.constant.TransactionStatus;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;

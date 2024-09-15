@@ -1,7 +1,6 @@
 package com.palu_gada_be.palu_gada_be.service;
 
 import com.palu_gada_be.palu_gada_be.dto.request.RegisterRequest;
-import com.palu_gada_be.palu_gada_be.dto.request.UpdateBalanceRequest;
 import com.palu_gada_be.palu_gada_be.dto.response.UserResponse;
 import com.palu_gada_be.palu_gada_be.model.User;
 import org.springframework.data.domain.Page;
