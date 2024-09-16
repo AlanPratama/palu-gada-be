@@ -1,13 +1,19 @@
 package com.palu_gada_be.palu_gada_be.service.Impl;
 
+import com.palu_gada_be.palu_gada_be.constant.UserGender;
 import com.palu_gada_be.palu_gada_be.dto.request.RegisterRequest;
+import com.palu_gada_be.palu_gada_be.dto.request.ResetPasswordRequest;
 import com.palu_gada_be.palu_gada_be.dto.request.UpdateBalanceRequest;
+import com.palu_gada_be.palu_gada_be.dto.request.UserUpdateRequest;
+import com.palu_gada_be.palu_gada_be.dto.response.CloudinaryResponse;
 import com.palu_gada_be.palu_gada_be.dto.response.UserResponse;
 import com.palu_gada_be.palu_gada_be.mapper.UserMapper;
 import com.palu_gada_be.palu_gada_be.model.Role;
 import com.palu_gada_be.palu_gada_be.model.User;
 import com.palu_gada_be.palu_gada_be.repository.RoleRepository;
 import com.palu_gada_be.palu_gada_be.repository.UserRepository;
+import com.palu_gada_be.palu_gada_be.security.JwtService;
+import com.palu_gada_be.palu_gada_be.service.CloudinaryService;
 import com.palu_gada_be.palu_gada_be.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -15,7 +21,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -25,7 +33,9 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
+    private final JwtService jwtService;
     private final PasswordEncoder passwordEncoder;
+    private final CloudinaryService cloudinaryService;
 
     @Override
     public Page<UserResponse> getAll(Pageable pageable) {
@@ -74,8 +84,27 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserResponse updateById(Long id, User user) {
-        return null;
+    @Transactional
+    public UserResponse updateById(Long id, UserUpdateRequest updatedUser, MultipartFile file) {
+        User user = findById(id);
+
+        if (file != null && !file.isEmpty()){
+            try {
+                CloudinaryResponse response = cloudinaryService.uploadFile(file);
+                user.setPhotoUrl(response.getUrl());
+            } catch (IOException e){
+                throw new RuntimeException("Failed to upload image", e);
+            }
+        }
+
+        user.setPhone(updatedUser.getPhone());
+        user.setAddress(updatedUser.getAddress());
+        user.setName(updatedUser.getName());
+        user.setBirthDate(updatedUser.getBirthDate());
+        user.setUserGender(UserGender.valueOf(updatedUser.getUserGender().toUpperCase()));
+
+        User updated = userRepository.save(user);
+        return UserMapper.toUserResponse(updated);
     }
 
     @Override
@@ -89,6 +118,25 @@ public class UserServiceImpl implements UserService {
             throw ex;
         }
         return user;
+    }
+
+    @Override
+    public User getAuthentication() {
+        return userRepository.findById(jwtService.getUserAuthenticated().getId()).orElseThrow(
+                () -> new RuntimeException("Something went wrong")
+        );
+    }
+
+    @Override
+    public User resetPassword(ResetPasswordRequest request) {
+        User userAuthenticated = getAuthentication();
+        if (!(request.getPassword().equals(request.getPasswordConfirm()))){
+            throw new RuntimeException("Password not match");
+        }
+
+        userAuthenticated.setPassword(passwordEncoder.encode(request.getPassword()));
+
+        return userRepository.save(userAuthenticated);
     }
 
     @Override

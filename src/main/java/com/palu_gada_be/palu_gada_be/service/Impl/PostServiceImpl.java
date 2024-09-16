@@ -2,6 +2,7 @@ package com.palu_gada_be.palu_gada_be.service.Impl;
 
 import com.palu_gada_be.palu_gada_be.constant.PostStatus;
 import com.palu_gada_be.palu_gada_be.dto.request.PostRequest;
+import com.palu_gada_be.palu_gada_be.dto.response.CloudinaryResponse;
 import com.palu_gada_be.palu_gada_be.dto.response.DistrictResponse;
 import com.palu_gada_be.palu_gada_be.dto.response.PostResponse;
 import com.palu_gada_be.palu_gada_be.dto.response.UserResponse;
@@ -12,17 +13,16 @@ import com.palu_gada_be.palu_gada_be.model.PostCategory;
 import com.palu_gada_be.palu_gada_be.model.User;
 import com.palu_gada_be.palu_gada_be.repository.PostRepository;
 import com.palu_gada_be.palu_gada_be.security.JwtService;
-import com.palu_gada_be.palu_gada_be.service.CategoryService;
-import com.palu_gada_be.palu_gada_be.service.DistrictService;
-import com.palu_gada_be.palu_gada_be.service.PostCategoryService;
-import com.palu_gada_be.palu_gada_be.service.PostService;
+import com.palu_gada_be.palu_gada_be.service.*;
 import com.palu_gada_be.palu_gada_be.util.DateTimeUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
@@ -37,10 +37,11 @@ public class PostServiceImpl implements PostService {
     private final JwtService jwtService;
     private final PostCategoryService postCategoryService;
     private final CategoryService categoryService;
+    private final CloudinaryService cloudinaryService;
 
     @Override
     @Transactional
-    public PostResponse create(PostRequest request) {
+    public PostResponse create(PostRequest request, MultipartFile file) {
         User user = jwtService.getUserAuthenticated();
         District district = districtService.getById(request.getDistrictId());
 
@@ -61,8 +62,16 @@ public class PostServiceImpl implements PostService {
                 .postDeadline(deadline)
                 .finishDay(request.getFinishDay())
                 .postStatus(PostStatus.AVAILABLE)
-                .imageUrl(request.getImageUrl())
                 .build();
+
+        if (file != null && !file.isEmpty()){
+            try {
+                CloudinaryResponse response = cloudinaryService.uploadFile(file);
+                newPost.setImageUrl(response.getUrl());
+            } catch (IOException e){
+                throw new RuntimeException("Failed to upload image", e);
+            }
+        }
 
         Post post = postRepository.save(newPost);
         List<PostCategory> postCategories = new ArrayList<>();
@@ -120,7 +129,7 @@ public class PostServiceImpl implements PostService {
 
     @Override
     @Transactional
-    public Post updateById(Long id, PostRequest request) {
+    public Post updateById(Long id, PostRequest request, MultipartFile file) {
         Post existingPost = findById(id);
 
         District newDistrict = districtService.getById(request.getDistrictId());
@@ -132,7 +141,15 @@ public class PostServiceImpl implements PostService {
         existingPost.setBudgetMax(request.getBudgetMax());
         existingPost.setFinishDay(request.getFinishDay());
         existingPost.setPostStatus(PostStatus.AVAILABLE);
-        existingPost.setImageUrl(request.getImageUrl());
+
+        if (file != null && !file.isEmpty()){
+            try {
+                CloudinaryResponse response = cloudinaryService.uploadFile(file);
+                existingPost.setImageUrl(response.getUrl());
+            } catch (IOException e){
+                throw new RuntimeException("Failed to upload image", e);
+            }
+        }
 
         return postRepository.save(existingPost);
     }

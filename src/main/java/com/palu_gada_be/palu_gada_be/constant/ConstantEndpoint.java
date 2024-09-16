@@ -5,6 +5,7 @@ public class ConstantEndpoint {
 
     /* MEMBER ENDPOINT */
     public static final String MEMBER_USER_API = "/api/v1/users";
+    public static final String MEMBER_CATEGORY_API = "/api/v1/categories";
     public static final String MEMBER_POST_API = "/api/v1/posts";
     public static final String MEMBER_BID_API = "/api/v1/bids";
     public static final String MEMBER_PAYMENT_API = "/api/v1/payments";
@@ -16,6 +17,9 @@ public class ConstantEndpoint {
     public static final String ADMIN_POST_API = "/api/v1/admin/posts";
     public static final String ADMIN_BID_API = "/api/v1/admin/bids";
     public static final String ADMIN_PAYMENT_API = "/api/v1/admin/payments";
+
+    /* FILE ENDPOINT */
+    public static final String FILE_API = "/api/v1/files";
 
     /* MIDTRANS ENDPOINT */
     public static final String MIDTRANS_ENDPOINT = "https://api.sandbox.midtrans.com/v2";

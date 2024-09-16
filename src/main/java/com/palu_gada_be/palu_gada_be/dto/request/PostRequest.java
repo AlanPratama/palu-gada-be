@@ -19,5 +19,4 @@ public class PostRequest {
     private List<Long> categoriesId;
     private Long finishDay;
     private Boolean isUrgent;
-    private String imageUrl;
 }

@@ -1,7 +1,10 @@
 package com.palu_gada_be.palu_gada_be.dto.response;
 
 import com.palu_gada_be.palu_gada_be.constant.UserGender;
+import com.palu_gada_be.palu_gada_be.model.UserCategory;
 import lombok.*;
+
+import java.util.List;
 
 @Setter
 @Getter
@@ -15,4 +18,5 @@ public class UserResponse {
     private String email;
     private String photoUrl;
     private UserGender userGender;
+    private List<UserCategory> userCategories;
 }

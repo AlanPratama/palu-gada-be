@@ -11,6 +11,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping(ConstantEndpoint.MEMBER_POST_API)
@@ -32,12 +33,26 @@ public class MemberPostController {
 
     @PostMapping
     public ResponseEntity<?> create(
-        @RequestBody PostRequest request
+        @ModelAttribute PostRequest request,
+        @RequestParam(value = "file", required = false) MultipartFile file
     ) {
         return Response.renderJSON(
-            postService.create(request),
+            postService.create(request, file),
             "Success Create Post",
             HttpStatus.CREATED
+        );
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<?> update(
+            @PathVariable Long id,
+            @ModelAttribute PostRequest request,
+            @RequestParam(value = "file", required = false) MultipartFile file
+    ) {
+        return Response.renderJSON(
+                postService.updateById(id, request, file),
+                "Success Update Post",
+                HttpStatus.OK
         );
     }
 
