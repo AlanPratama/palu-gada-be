@@ -7,6 +7,7 @@ import com.palu_gada_be.palu_gada_be.util.DateTimeUtil;
 public class PaymentMapper {
     public static PaymentResponse toPaymentResponse(Payment payment){
         return PaymentResponse.builder()
+                .id(payment.getId())
                 .user(UserMapper.toUserResponse(payment.getUser()))
                 .transferDate(DateTimeUtil.convertLocalDateTimeToString(payment.getTransferDate(), "dd-MM-yyyy HH:mm:ss"))
                 .bank(payment.getBank())

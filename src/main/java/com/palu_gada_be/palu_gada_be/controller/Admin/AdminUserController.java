@@ -48,6 +48,15 @@ public class AdminUserController {
         );
     }
 
+    @GetMapping("/me")
+    public ResponseEntity<?> getUserAuthenticated() {
+        return Response.renderJSON(
+                userService.getAuthentication(),
+                "Success Get Data User Authenticated",
+                HttpStatus.OK
+        );
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteById(
             @PathVariable Long id
@@ -58,6 +67,7 @@ public class AdminUserController {
                 "Success Delete User"
         );
     }
+
 
 
 }

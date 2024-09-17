@@ -6,10 +6,12 @@ public class ConstantEndpoint {
     /* MEMBER ENDPOINT */
     public static final String MEMBER_USER_API = "/api/v1/users";
     public static final String MEMBER_CATEGORY_API = "/api/v1/categories";
+    public static final String MEMBER_DISTRICT_API = "/api/v1/districts";
     public static final String MEMBER_POST_API = "/api/v1/posts";
     public static final String MEMBER_BID_API = "/api/v1/bids";
     public static final String MEMBER_PAYMENT_API = "/api/v1/payments";
     public static final String MEMBER_USER_REPORT_API = "/api/v1/user-reports";
+    public static final String MEMBER_REVIEW_API = "/api/v1/reviews";
 
     /* ADMIN ENDPOINT */
     public static final String ADMIN_USER_API = "/api/v1/admin/users";
@@ -19,6 +21,7 @@ public class ConstantEndpoint {
     public static final String ADMIN_BID_API = "/api/v1/admin/bids";
     public static final String ADMIN_PAYMENT_API = "/api/v1/admin/payments";
     public static final String ADMIN_USER_REPORT_API = "/api/v1/admin/user-reports";
+    public static final String ADMIN_REVIEW_API = "/api/v1/admin/reviews";
 
     /* FILE ENDPOINT */
     public static final String FILE_API = "/api/v1/files";

@@ -69,6 +69,10 @@ public class Post {
     @OneToMany(mappedBy = "post")
     private List<Bid> bids = new ArrayList<>();
 
+    @OneToMany(mappedBy = "post")
+    @JsonIgnore
+    private List<Review> reviews = new ArrayList<>();
+
     @CreatedDate
     @Column(name = "createdAt", updatable = false)
     private LocalDateTime createdAt;

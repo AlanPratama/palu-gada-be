@@ -12,4 +12,5 @@ public class ConstantTable {
     public static final String PENDING_BID = "pendingBids";
     public static final String ROLE = "roles";
     public static final String USER_REPORT = "userReports";
+    public static final String REVIEW = "reviews";
 }

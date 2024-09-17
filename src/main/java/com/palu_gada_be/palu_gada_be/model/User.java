@@ -48,6 +48,7 @@ public class User implements UserDetails {
     private String username;
 
     @Column(name = "password", nullable = false)
+    @JsonIgnore
     private String password;
 
     @Column(name = "address")
@@ -85,6 +86,10 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "user")
     @JsonIgnore
     private List<UserReport> userReports;
+
+    @OneToMany(mappedBy = "user")
+    @JsonIgnore
+    private List<Review> reviews = new ArrayList<>();
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(

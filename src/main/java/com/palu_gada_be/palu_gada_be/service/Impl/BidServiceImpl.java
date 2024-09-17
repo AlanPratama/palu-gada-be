@@ -41,7 +41,7 @@ public class BidServiceImpl implements BidService {
             throw new RuntimeException("You can't bid to your own post");
         }
 
-        if (!(request.getAmount() < post.getBudgetMin() || request.getAmount() > post.getBudgetMax())){
+        if (!(request.getAmount() > post.getBudgetMin() && request.getAmount() < post.getBudgetMax())){
             throw new RuntimeException("Amount must be in the range budget");
         }
 
@@ -87,9 +87,12 @@ public class BidServiceImpl implements BidService {
         Bid bid = findById(id);
         User user = jwtService.getUserAuthenticated();
 
-        if (!bid.getPost().getUser().getId().equals(user.getId())){
-            throw new IllegalArgumentException("Forbidden Action");
+        if (user.getAuthorities().stream().noneMatch((authority -> authority.getAuthority().equals("ROLE_ADMIN")))){
+            if (!bid.getPost().getUser().getId().equals(user.getId())){
+                throw new IllegalArgumentException("Forbidden Action");
+            }
         }
+
 
         try {
             if (BidStatus.ACCEPTED == BidStatus.valueOf(status.toUpperCase())){

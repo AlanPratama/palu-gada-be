@@ -21,6 +21,17 @@ public class MemberPostController {
     private final PostService postService;
 
     @GetMapping
+    public ResponseEntity<?> getAll(
+        @PageableDefault Pageable pageable
+    ) {
+        return Response.renderJSON(
+            new PageResponse<>(postService.getAll(pageable)),
+            "Success Get Post",
+            HttpStatus.OK
+        );
+    }
+
+    @GetMapping("/me")
     public ResponseEntity<?> getUserAllPost(
         @PageableDefault Pageable pageable
     ) {
