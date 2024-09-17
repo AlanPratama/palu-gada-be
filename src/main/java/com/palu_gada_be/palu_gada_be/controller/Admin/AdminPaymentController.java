@@ -45,7 +45,7 @@ public class AdminPaymentController {
     @PutMapping("/{id}/transaction")
     public ResponseEntity<?> updateTransactionStatus(
             @PathVariable Long id,
-            @RequestParam String status
+            @RequestParam(value = "status") String status
     ) throws Exception {
         return Response.renderJSON(
                 paymentService.updateTransaction(id, status),

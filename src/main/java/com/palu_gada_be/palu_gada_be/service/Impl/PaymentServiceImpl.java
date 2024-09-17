@@ -142,7 +142,7 @@ public class PaymentServiceImpl implements PaymentService {
     @Override
     @Transactional
     public PaymentResponse updateTransaction(Long id, String status) throws Exception {
-        MidtransResponse midtransResponse = midtransService.updateTransactionStatus(ConstantPayment.ORDER_ID_PREFIX + id, status);
+        MidtransResponse midtransResponse = midtransService.updateTransactionStatus(ConstantPayment.ORDER_ID_PREFIX + id, status.toLowerCase());
         Payment payment = findById(id);
         payment.setPaymentStatus(PaymentStatus.valueOf(midtransResponse.getTransactionStatus().toUpperCase()));
         paymentRepository.save(payment);
@@ -152,7 +152,7 @@ public class PaymentServiceImpl implements PaymentService {
                 userService.updateBalance(payment.getUser().getId(), payment.getAmount());
             }
         } catch (Exception e) {
-            throw new Exception(e.getMessage());
+            throw new Exception("Someting Wrong when update transaction, please try again later");
         }
 
         return PaymentMapper.toPaymentResponse(payment);
