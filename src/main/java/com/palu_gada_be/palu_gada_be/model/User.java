@@ -82,6 +82,10 @@ public class User implements UserDetails {
     @JsonIgnore
     private List<Post> posts = new ArrayList<>();
 
+    @OneToMany(mappedBy = "user")
+    @JsonIgnore
+    private List<UserReport> userReports;
+
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "user_roles",
