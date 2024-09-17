@@ -12,6 +12,7 @@ public interface PostService {
     Page<PostResponse> getAll(Pageable pageable);
     Page<PostResponse> getAllByUserId(Pageable pageable);
     PostResponse getById(Long id);
+    PostResponse updateStatusPost(Long id, String status);
     Post findById(Long id);
     Post updateById(Long id, PostRequest request, MultipartFile file);
     void deleteById(Long id);

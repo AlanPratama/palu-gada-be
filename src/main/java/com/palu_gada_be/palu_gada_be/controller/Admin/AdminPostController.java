@@ -43,14 +43,13 @@ public class AdminPostController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> update(
+    public ResponseEntity<?> updateStatus(
         @PathVariable Long id,
-        @RequestBody PostRequest request,
-     @RequestParam(value = "file", required = false) MultipartFile file
+        @RequestParam(value = "status") String request
     ) {
         return Response.renderJSON(
-            postService.updateById(id, request, file),
-            "Success Update Post",
+            postService.updateStatusPost(id, request),
+            "Success Update Post Status",
             HttpStatus.OK
         );
     }

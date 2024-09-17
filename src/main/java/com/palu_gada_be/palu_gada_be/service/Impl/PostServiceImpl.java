@@ -52,7 +52,9 @@ public class PostServiceImpl implements PostService {
             deadline = LocalDateTime.now().plus(30, ChronoUnit.DAYS);
         }
 
-        
+        if (request.getBudgetMin() > request.getBudgetMax()) {
+            throw new RuntimeException("Budget must be valid");
+        }
 
         Post newPost = Post.builder()
                 .user(user)
@@ -121,6 +123,18 @@ public class PostServiceImpl implements PostService {
                 () -> new RuntimeException("Post not Found")
         );
 
+        return PostMapper.toPostResponse(post);
+    }
+
+    @Override
+    public PostResponse updateStatusPost(Long id, String status) {
+        Post post = findById(id);
+        try {
+            post.setPostStatus(PostStatus.valueOf(status.toUpperCase()));
+            postRepository.save(post);
+        } catch (IllegalArgumentException e){
+            throw new IllegalArgumentException("Invalid status value");
+        }
         return PostMapper.toPostResponse(post);
     }
 
