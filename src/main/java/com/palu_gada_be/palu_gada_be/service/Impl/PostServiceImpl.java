@@ -52,6 +52,8 @@ public class PostServiceImpl implements PostService {
             deadline = LocalDateTime.now().plus(30, ChronoUnit.DAYS);
         }
 
+        
+
         Post newPost = Post.builder()
                 .user(user)
                 .district(district)
@@ -62,6 +64,7 @@ public class PostServiceImpl implements PostService {
                 .postDeadline(deadline)
                 .finishDay(request.getFinishDay())
                 .postStatus(PostStatus.AVAILABLE)
+                .isUrgent(request.getIsUrgent())
                 .build();
 
         if (file != null && !file.isEmpty()){
