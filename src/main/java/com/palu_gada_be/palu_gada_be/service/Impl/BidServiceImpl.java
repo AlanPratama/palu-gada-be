@@ -105,7 +105,7 @@ public class BidServiceImpl implements BidService {
                     userService.updateBalance(user.getId(), Math.abs(bid.getAmount())*-1);
                     pendingBidService.create(pendingBid);
                 } catch (Exception e){
-                    throw new RuntimeException("Cannot Accept Bid, Try again later");
+                    throw new RuntimeException("Cannot Accept Bid, Balance Not Enough");
                 }
 
             }
@@ -119,7 +119,7 @@ public class BidServiceImpl implements BidService {
                     userService.updateBalance(bid.getUser().getId(), bid.getAmount());
                     pendingBidService.delete(existingPendingBid.getId());
                 } catch (Exception e){
-                    throw new RuntimeException("Cannot Finish Bid, Try again later");
+                    throw new RuntimeException("Cannot Finish Bid, Accept First");
                 }
             }
 

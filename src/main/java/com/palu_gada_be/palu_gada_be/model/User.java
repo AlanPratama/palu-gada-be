@@ -54,9 +54,9 @@ public class User implements UserDetails {
     @Column(name = "address")
     private String address;
 
-    @Column(name = "balance")
+    @Column(name = "balance", nullable = false, columnDefinition = "BIGINT DEFAULT 0")
     @Min(value = 0, message = "Balance must be at least 0")
-    private Long balance;
+    private Long balance = 0L;
 
     @Column(name = "photoUrl")
     private String photoUrl;
@@ -86,6 +86,10 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "user")
     @JsonIgnore
     private List<UserReport> userReports;
+
+    @OneToMany(mappedBy = "user")
+    @JsonIgnore
+    private List<PostReport> postReports;
 
     @OneToMany(mappedBy = "user")
     @JsonIgnore
