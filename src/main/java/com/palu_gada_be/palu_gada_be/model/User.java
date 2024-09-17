@@ -54,9 +54,9 @@ public class User implements UserDetails {
     @Column(name = "address")
     private String address;
 
-    @Column(name = "balance", nullable = false, columnDefinition = "BIGINT DEFAULT 0")
+    @Column(name = "balance", nullable = false)
     @Min(value = 0, message = "Balance must be at least 0")
-    private Long balance = 0L;
+    private Long balance;
 
     @Column(name = "photoUrl")
     private String photoUrl;
@@ -116,5 +116,12 @@ public class User implements UserDetails {
         return roles.stream()
                 .map(role -> new SimpleGrantedAuthority(role.getName()))
                 .collect(Collectors.toSet());
+    }
+
+    @PrePersist
+    public void prePersist() {
+        if (this.balance == null) {
+            this.balance = 0L;
+        }
     }
 }
