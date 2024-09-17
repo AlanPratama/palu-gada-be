@@ -27,6 +27,7 @@ public class UserCategory {
 
     @ManyToOne
     @JoinColumn(name = "userId")
+    @JsonIgnore
     private User user;
 
     @ManyToOne

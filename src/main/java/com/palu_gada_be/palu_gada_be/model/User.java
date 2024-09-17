@@ -76,7 +76,6 @@ public class User implements UserDetails {
     private List<Bid> bids = new ArrayList<>();
 
     @OneToMany(mappedBy = "user")
-    @JsonIgnore
     private List<UserCategory> userCategories = new ArrayList<>();
 
     @OneToMany(mappedBy = "user")

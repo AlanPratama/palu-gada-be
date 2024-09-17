@@ -18,6 +18,7 @@ public class UserMapper {
                 .email(user.getEmail())
                 .photoUrl(user.getPhotoUrl())
                 .userGender(user.getUserGender())
+                .userCategories(user.getUserCategories())
                 .build();
     }
 }

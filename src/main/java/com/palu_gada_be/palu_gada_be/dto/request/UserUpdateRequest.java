@@ -2,6 +2,8 @@ package com.palu_gada_be.palu_gada_be.dto.request;
 
 import lombok.*;
 
+import java.util.List;
+
 @Setter
 @Getter
 @Builder
@@ -14,4 +16,5 @@ public class UserUpdateRequest {
     private String name;
     private String birthDate;
     private String userGender;
+    private List<Long> userCategoriesId;
 }

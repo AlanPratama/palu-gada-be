@@ -93,7 +93,7 @@ public class PostServiceImpl implements PostService {
                 postCategoryService.createAll(postCategories);
             }
         } catch (Exception ex){
-            throw new RuntimeException("Error creating post");
+            throw new RuntimeException("Categories not found");
         }
 
         newPost.setPostCategories(postCategories);

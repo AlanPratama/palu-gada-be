@@ -8,12 +8,16 @@ import com.palu_gada_be.palu_gada_be.dto.request.UserUpdateRequest;
 import com.palu_gada_be.palu_gada_be.dto.response.CloudinaryResponse;
 import com.palu_gada_be.palu_gada_be.dto.response.UserResponse;
 import com.palu_gada_be.palu_gada_be.mapper.UserMapper;
+import com.palu_gada_be.palu_gada_be.model.PostCategory;
 import com.palu_gada_be.palu_gada_be.model.Role;
 import com.palu_gada_be.palu_gada_be.model.User;
+import com.palu_gada_be.palu_gada_be.model.UserCategory;
 import com.palu_gada_be.palu_gada_be.repository.RoleRepository;
 import com.palu_gada_be.palu_gada_be.repository.UserRepository;
 import com.palu_gada_be.palu_gada_be.security.JwtService;
+import com.palu_gada_be.palu_gada_be.service.CategoryService;
 import com.palu_gada_be.palu_gada_be.service.CloudinaryService;
+import com.palu_gada_be.palu_gada_be.service.UserCategoyService;
 import com.palu_gada_be.palu_gada_be.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -24,7 +28,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Service
@@ -36,6 +42,8 @@ public class UserServiceImpl implements UserService {
     private final JwtService jwtService;
     private final PasswordEncoder passwordEncoder;
     private final CloudinaryService cloudinaryService;
+    private final CategoryService categoryService;
+    private final UserCategoyService userCategoyService;
 
     @Override
     public Page<UserResponse> getAll(Pageable pageable) {
@@ -95,6 +103,23 @@ public class UserServiceImpl implements UserService {
             } catch (IOException e){
                 throw new RuntimeException("Failed to upload image", e);
             }
+        }
+
+        List<UserCategory> userCategories = new ArrayList<>();
+
+        try {
+            if (updatedUser.getUserCategoriesId() != null){
+                for (var c : updatedUser.getUserCategoriesId()){
+                    UserCategory temp = UserCategory.builder()
+                            .category(categoryService.getById(c))
+                            .user(user)
+                            .build();
+                    userCategories.add(temp);
+                }
+                userCategoyService.createAll(userCategories);
+            }
+        } catch (Exception ex){
+            throw new RuntimeException("Categories not found");
         }
 
         user.setPhone(updatedUser.getPhone());
