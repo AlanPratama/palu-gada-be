@@ -37,6 +37,17 @@ public class CloudinaryServiceImpl implements CloudinaryService {
     }
 
     @Override
+    public CloudinaryResponse replaceFile(String publicId, MultipartFile file) throws IOException {
+        Map uploadResult = cloudinary.uploader().upload(file.getBytes(),
+                ObjectUtils.asMap("public_id", publicId, "overwrite", true));
+
+        return CloudinaryResponse.builder()
+                .url(uploadResult.get("secure_url").toString())
+                .publicId(uploadResult.get("public_id").toString())
+                .build();
+    }
+
+    @Override
     public Map deleteFileByPublicId(String publicId) {
         try {
             return cloudinary.uploader().destroy(publicId, ObjectUtils.emptyMap());

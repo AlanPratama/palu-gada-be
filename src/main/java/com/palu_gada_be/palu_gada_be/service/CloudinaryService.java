@@ -9,5 +9,6 @@ import java.util.Map;
 public interface CloudinaryService {
     CloudinaryResponse uploadFile(MultipartFile file) throws IOException;
     Map getFileByPublicId(String publicId);
+    CloudinaryResponse replaceFile(String publicId, MultipartFile file) throws IOException;
     Map deleteFileByPublicId(String publicId);
 }

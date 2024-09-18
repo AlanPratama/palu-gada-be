@@ -92,12 +92,21 @@ public class UserServiceImpl implements UserService {
         User user = findById(id);
         District district = districtService.getById(updatedUser.getDistrictId());
 
-        if (file != null && !file.isEmpty()){
+        if (file != null && !file.isEmpty()) {
             try {
-                CloudinaryResponse response = cloudinaryService.uploadFile(file);
+                CloudinaryResponse response;
+
+                if (user.getCloudinaryPublicId() != null && !user.getCloudinaryPublicId().isEmpty()) {
+                    response = cloudinaryService.replaceFile(user.getCloudinaryPublicId(), file);
+                } else {
+                    response = cloudinaryService.uploadFile(file);
+                }
+
                 user.setPhotoUrl(response.getUrl());
-            } catch (IOException e){
-                throw new RuntimeException("Failed to upload image", e);
+                user.setCloudinaryPublicId(response.getPublicId());
+
+            } catch (IOException e) {
+                throw new RuntimeException("Failed to upload or replace image", e);
             }
         }
 
