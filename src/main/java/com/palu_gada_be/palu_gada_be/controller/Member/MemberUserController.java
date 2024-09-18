@@ -29,7 +29,7 @@ public class MemberUserController {
         );
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/update-password")
     public ResponseEntity<?> updateUser(
         @PathVariable Long id,
         @ModelAttribute UserUpdateRequest user,
@@ -42,7 +42,7 @@ public class MemberUserController {
         );
     }
 
-    @PostMapping
+    @PutMapping
     public ResponseEntity<?> resetPassword(
             @RequestBody ResetPasswordRequest request
     ) {

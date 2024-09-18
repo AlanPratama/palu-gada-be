@@ -73,6 +73,10 @@ public class Post {
     @JsonIgnore
     private List<Review> reviews = new ArrayList<>();
 
+    @OneToMany(mappedBy = "post")
+    @JsonIgnore
+    private List<PostReport> postReports;
+
     @CreatedDate
     @Column(name = "createdAt", updatable = false)
     private LocalDateTime createdAt;

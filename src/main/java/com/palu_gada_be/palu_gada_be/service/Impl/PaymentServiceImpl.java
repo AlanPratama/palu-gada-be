@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -58,6 +59,11 @@ public class PaymentServiceImpl implements PaymentService {
         return paymentRepository.findById(id).orElseThrow(
                 () -> new RuntimeException("Payment not found")
         );
+    }
+
+    @Override
+    public List<Payment> getPendingPayments() {
+        return paymentRepository.findByPaymentStatus(PaymentStatus.PENDING);
     }
 
     @Override
