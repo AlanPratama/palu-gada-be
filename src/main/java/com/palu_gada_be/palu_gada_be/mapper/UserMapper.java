@@ -2,6 +2,7 @@ package com.palu_gada_be.palu_gada_be.mapper;
 
 import com.palu_gada_be.palu_gada_be.dto.response.UserResponse;
 import com.palu_gada_be.palu_gada_be.model.User;
+import com.palu_gada_be.palu_gada_be.util.DateTimeUtil;
 import lombok.Data;
 
 @Data
@@ -19,6 +20,8 @@ public class UserMapper {
                 .photoUrl(user.getPhotoUrl())
                 .userGender(user.getUserGender())
                 .userCategories(user.getUserCategories())
+                .createdAt(DateTimeUtil.convertLocalDateTimeToString(user.getCreatedAt(), "yyyy-MM-dd HH:mm:ss"))
+                .updatedAt(DateTimeUtil.convertLocalDateTimeToString(user.getUpdatedAt(), "yyyy-MM-dd HH:mm:ss"))
                 .build();
     }
 }

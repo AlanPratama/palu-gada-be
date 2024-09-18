@@ -12,4 +12,6 @@ public class DistrictResponse {
     private String districtName;
     private String regency;
     private String province;
+    private String createdAt;
+    private String updatedAt;
 }

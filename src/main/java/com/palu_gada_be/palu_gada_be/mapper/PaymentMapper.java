@@ -17,6 +17,8 @@ public class PaymentMapper {
                 .paymentType(payment.getPaymentType())
                 .expiryTime(payment.getExpiryTime())
                 .status(payment.getPaymentStatus())
+                .createdAt(DateTimeUtil.convertLocalDateTimeToString(payment.getCreatedAt(), "yyyy-MM-dd HH:mm:ss"))
+                .updatedAt(DateTimeUtil.convertLocalDateTimeToString(payment.getUpdatedAt(), "yyyy-MM-dd HH:mm:ss"))
                 .build();
     }
 }

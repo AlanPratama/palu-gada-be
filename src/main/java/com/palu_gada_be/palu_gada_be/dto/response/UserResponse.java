@@ -19,4 +19,6 @@ public class UserResponse {
     private String photoUrl;
     private UserGender userGender;
     private List<UserCategory> userCategories;
+    private String createdAt;
+    private String updatedAt;
 }

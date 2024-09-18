@@ -13,4 +13,6 @@ public class ReviewResponse {
     private PostResponse post;
     private Long rating;
     private String comment;
+    private String createdAt;
+    private String updatedAt;
 }

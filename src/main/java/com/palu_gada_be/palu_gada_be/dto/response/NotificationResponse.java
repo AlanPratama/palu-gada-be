@@ -7,9 +7,13 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class PostCategoryResponse {
+public class NotificationResponse {
     private Long id;
-    private String category;
+    private UserResponse user;
+    private String title;
+    private String description;
+    private Boolean isRead;
+    private String icon;
     private String createdAt;
     private String updatedAt;
 }

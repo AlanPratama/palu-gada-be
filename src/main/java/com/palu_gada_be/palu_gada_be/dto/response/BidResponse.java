@@ -15,4 +15,6 @@ public class BidResponse {
     private Long amount;
     private String message;
     private BidStatus status;
+    private String createdAt;
+    private String updatedAt;
 }

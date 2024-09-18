@@ -21,4 +21,6 @@ public class PaymentResponse {
     private String paymentType;
     private String expiryTime;
     private PaymentStatus status;
+    private String createdAt;
+    private String updatedAt;
 }

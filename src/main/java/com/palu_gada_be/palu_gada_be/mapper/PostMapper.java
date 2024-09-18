@@ -2,6 +2,7 @@ package com.palu_gada_be.palu_gada_be.mapper;
 
 import com.palu_gada_be.palu_gada_be.dto.response.PostResponse;
 import com.palu_gada_be.palu_gada_be.model.Post;
+import com.palu_gada_be.palu_gada_be.util.DateTimeUtil;
 import lombok.Data;
 
 import java.util.stream.Collectors;
@@ -24,6 +25,8 @@ public class PostMapper {
                 .imageUrl(post.getImageUrl())
                 .postCategories(post.getPostCategories().stream().map(PostCategoryMapper::toPostCategoryResponse).collect(Collectors.toList()))
                 .bids(post.getBids())
+                .createdAt(DateTimeUtil.convertLocalDateTimeToString(post.getCreatedAt(), "yyyy-MM-dd HH:mm:ss"))
+                .updatedAt(DateTimeUtil.convertLocalDateTimeToString(post.getUpdatedAt(), "yyyy-MM-dd HH:mm:ss"))
                 .build();
     }
 }

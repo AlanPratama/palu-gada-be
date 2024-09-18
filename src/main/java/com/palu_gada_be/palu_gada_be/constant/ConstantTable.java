@@ -14,4 +14,5 @@ public class ConstantTable {
     public static final String USER_REPORT = "userReports";
     public static final String REVIEW = "reviews";
     public static final String POST_REPORT = "postReports";
+    public static final String NOTIFICATION = "notifications";
 }

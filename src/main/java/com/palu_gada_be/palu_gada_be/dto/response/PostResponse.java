@@ -26,4 +26,6 @@ public class PostResponse {
     private String imageUrl;
     private List<PostCategoryResponse> postCategories;
     private List<Bid> bids;
+    private String createdAt;
+    private String updatedAt;
 }

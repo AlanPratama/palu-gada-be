@@ -12,4 +12,6 @@ public class UserReportResponse {
     private UserResponse reportedUser;
     private UserResponse user;
     private String message;
+    private String createdAt;
+    private String updatedAt;
 }

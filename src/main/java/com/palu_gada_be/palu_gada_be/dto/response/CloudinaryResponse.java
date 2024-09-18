@@ -12,4 +12,6 @@ import lombok.NoArgsConstructor;
 public class CloudinaryResponse {
     private String publicId;
     private String url;
+    private String createdAt;
+    private String updatedAt;
 }
