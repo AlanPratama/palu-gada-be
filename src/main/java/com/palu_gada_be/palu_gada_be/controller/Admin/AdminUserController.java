@@ -12,6 +12,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping(ConstantEndpoint.ADMIN_USER_API)
 @RequiredArgsConstructor
@@ -21,9 +23,14 @@ public class AdminUserController {
 
     @GetMapping
     public ResponseEntity<?> getAll(
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) List<Long> districtIds,
+            @RequestParam(required = false) String sortField,
+            @RequestParam(required = false) String sortDirection,
             @PageableDefault Pageable pageable
     ) {
-        return Response.renderJSON(new PageResponse<>(userService.getAll(pageable)), "Success Get Data", HttpStatus.OK);
+        System.out.println(districtIds);
+        return Response.renderJSON(new PageResponse<>(userService.getAll(name, districtIds, sortField, sortDirection, pageable)), "Success Get Data", HttpStatus.OK);
     }
 
     @PostMapping

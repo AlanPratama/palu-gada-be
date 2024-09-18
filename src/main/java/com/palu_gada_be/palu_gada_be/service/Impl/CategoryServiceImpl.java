@@ -5,9 +5,14 @@ import com.palu_gada_be.palu_gada_be.model.Category;
 import com.palu_gada_be.palu_gada_be.repository.CategoryRepository;
 import com.palu_gada_be.palu_gada_be.service.CategoryService;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+
+import static com.palu_gada_be.palu_gada_be.specification.CategorySpecification.nameLike;
+import static com.palu_gada_be.palu_gada_be.specification.CategorySpecification.sortByField;
 
 @Service
 @RequiredArgsConstructor
@@ -25,8 +30,11 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public Page<Category> getAll(Pageable pageable) {
-        return categoryRepository.findAll(pageable);
+    public Page<Category> getAll(String nameLikeFilter, String sortField, String sortDirection, Pageable pageable) {
+        Specification<Category> spec = Specification.where(StringUtils.isBlank(nameLikeFilter) ? null : nameLike(nameLikeFilter))
+                                                    .and(StringUtils.isBlank(sortField) ? null : sortByField(sortField, sortDirection));
+
+        return categoryRepository.findAll(spec, pageable);
     }
 
     @Override

@@ -11,9 +11,14 @@ import com.palu_gada_be.palu_gada_be.security.JwtService;
 import com.palu_gada_be.palu_gada_be.service.PostReportService;
 import com.palu_gada_be.palu_gada_be.service.PostService;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+
+import static com.palu_gada_be.palu_gada_be.specification.PostReportSpecification.messageLike;
+import static com.palu_gada_be.palu_gada_be.specification.PostReportSpecification.sortByField;
 
 @Service
 @RequiredArgsConstructor
@@ -40,8 +45,11 @@ public class PostReportServiceImpl implements PostReportService {
     }
 
     @Override
-    public Page<PostReportResponse> getAll(Pageable pageable) {
-        Page<PostReport> postReports = postReportRepository.findAll(pageable);
+    public Page<PostReportResponse> getAll(String messageLikeFilter, String sortField, String sortDirection, Pageable pageable) {
+        Specification<PostReport> spec = Specification.where(StringUtils.isBlank(messageLikeFilter) ? null : messageLike(messageLikeFilter))
+                .and(StringUtils.isBlank(sortField) ? null : sortByField(sortField, sortDirection));
+
+        Page<PostReport> postReports = postReportRepository.findAll(spec, pageable);
 
         return postReports.map(PostReportMapper::toPostReportResponse);
     }

@@ -7,9 +7,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+
 public interface PostService {
     PostResponse create(PostRequest request, MultipartFile file);
-    Page<PostResponse> getAll(Pageable pageable);
+    Page<PostResponse> getAll(String titleLikeFilter, List<Long> districtId, String sortField, String sortDirection, Pageable pageable);
     Page<PostResponse> getAllByUserId(Pageable pageable);
     PostResponse getById(Long id);
     PostResponse updateStatusPost(Long id, String status);

@@ -9,7 +9,7 @@ import org.springframework.data.domain.Pageable;
 import java.util.List;
 
 public interface PaymentService {
-    Page<PaymentResponse> getAll(Pageable pageable);
+    Page<PaymentResponse> getAll(String bank, String status, String sortField, String sortDirection, Pageable pageable);
     Page<PaymentResponse> getByUserId(Long id, Pageable pageable);
     Page<PaymentResponse> getByUserAuthenticated(Pageable pageable);
     Payment findById(Long id);

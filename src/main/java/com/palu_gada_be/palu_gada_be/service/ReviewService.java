@@ -6,9 +6,11 @@ import com.palu_gada_be.palu_gada_be.model.Review;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.util.List;
+
 public interface ReviewService {
     ReviewResponse create(ReviewRequest request);
-    Page<ReviewResponse> getAll(Pageable pageable);
+    Page<ReviewResponse> getAll(String commentLikeFilter, List<Long> ratings, String sortField, String sortDirection, Pageable pageable);
     Page<ReviewResponse> getByPostId(Long id, Pageable pageable);
     Page<ReviewResponse> getByUserId(Long id, Pageable pageable);
     Page<ReviewResponse> getAllUserAuthenticated(Pageable pageable);

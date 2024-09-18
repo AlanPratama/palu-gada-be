@@ -15,10 +15,14 @@ import com.palu_gada_be.palu_gada_be.service.PendingBidService;
 import com.palu_gada_be.palu_gada_be.service.PostService;
 import com.palu_gada_be.palu_gada_be.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import static com.palu_gada_be.palu_gada_be.specification.BidSpecification.*;
 
 @Service
 @RequiredArgsConstructor
@@ -59,8 +63,12 @@ public class BidServiceImpl implements BidService {
     }
 
     @Override
-    public Page<BidResponse> getAll(Pageable pageable) {
-        Page<Bid> bids = bidRepository.findAll(pageable);
+    public Page<BidResponse> getAll(String message, String status, String sortField, String sortDirection, Pageable pageable) {
+        Specification<Bid> spec = Specification.where(StringUtils.isBlank(message) ? null : messageLike(message))
+                                                .and(StringUtils.isBlank(status) ? null : statusLike(status))
+                                                .and(StringUtils.isBlank(sortField) ? null : sortByField(sortField, sortDirection));
+
+        Page<Bid> bids = bidRepository.findAll(spec, pageable);
 
         return bids.map(BidMapper::toBidResponse);
     }

@@ -11,6 +11,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping(ConstantEndpoint.ADMIN_REVIEW_API)
 @RequiredArgsConstructor
@@ -20,10 +22,14 @@ public class AdminReviewController {
 
     @GetMapping
     public ResponseEntity<?> getAll(
+        @RequestParam(required = false) String comment,
+        @RequestParam(required = false) List<Long> ratings,
+        @RequestParam(required = false) String sortField,
+        @RequestParam(required = false) String sortDirection,
         @PageableDefault Pageable pageable
     ) {
         return Response.renderJSON(
-            new PageResponse<>(reviewService.getAll(pageable)),
+            new PageResponse<>(reviewService.getAll(comment, ratings, sortField, sortDirection, pageable)),
             "Success Get All Review",
             HttpStatus.OK
         );

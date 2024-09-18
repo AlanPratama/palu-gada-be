@@ -11,6 +11,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 
 @RestController
 @RequestMapping(ConstantEndpoint.ADMIN_BID_API)
@@ -20,9 +22,15 @@ public class AdminBidController {
     private final BidService bidService;
 
     @GetMapping
-    public ResponseEntity<?> getAll(@PageableDefault Pageable pageable) {
+    public ResponseEntity<?> getAll(
+            @RequestParam(required = false) String message,
+            @RequestParam(required = false) String status,
+            @RequestParam(required = false) String sortField,
+            @RequestParam(required = false) String sortDirection,
+            @PageableDefault Pageable pageable
+    ) {
         return Response.renderJSON(
-                new PageResponse<>(bidService.getAll(pageable)),
+                new PageResponse<>(bidService.getAll(message, status, sortField, sortDirection, pageable)),
                 "Success Get Bids",
                 HttpStatus.OK
         );

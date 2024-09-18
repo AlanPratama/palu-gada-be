@@ -4,7 +4,6 @@ import com.palu_gada_be.palu_gada_be.constant.BidStatus;
 import com.palu_gada_be.palu_gada_be.dto.request.ReviewRequest;
 import com.palu_gada_be.palu_gada_be.dto.response.ReviewResponse;
 import com.palu_gada_be.palu_gada_be.mapper.ReviewMapper;
-import com.palu_gada_be.palu_gada_be.model.Bid;
 import com.palu_gada_be.palu_gada_be.model.Post;
 import com.palu_gada_be.palu_gada_be.model.Review;
 import com.palu_gada_be.palu_gada_be.model.User;
@@ -14,11 +13,16 @@ import com.palu_gada_be.palu_gada_be.service.BidService;
 import com.palu_gada_be.palu_gada_be.service.PostService;
 import com.palu_gada_be.palu_gada_be.service.ReviewService;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
-import java.util.stream.Collectors;
+import java.util.List;
+
+import static com.palu_gada_be.palu_gada_be.specification.ReviewSpecification.*;
 
 @Service
 @RequiredArgsConstructor
@@ -52,8 +56,12 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public Page<ReviewResponse> getAll(Pageable pageable) {
-        Page<Review> reviews = reviewRepository.findAll(pageable);
+    public Page<ReviewResponse> getAll(String commentLikeFilter, List<Long> ratings, String sortField, String sortDirection, Pageable pageable) {
+        Specification<Review> spec = Specification.where(StringUtils.isBlank(commentLikeFilter) ? null : commentLike(commentLikeFilter))
+                .and(CollectionUtils.isEmpty(ratings) ? null : inRating(ratings))
+                .and(StringUtils.isBlank(sortField) ? null : sortByField(sortField, sortDirection));
+
+        Page<Review> reviews = reviewRepository.findAll(spec, pageable);
 
         return reviews.map(ReviewMapper::toReviewResponse);
     }

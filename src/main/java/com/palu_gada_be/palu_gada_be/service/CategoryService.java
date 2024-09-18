@@ -7,7 +7,7 @@ import org.springframework.data.domain.Pageable;
 
 public interface CategoryService {
     Category create(CategoryRequest request);
-    Page<Category> getAll(Pageable pageable);
+    Page<Category> getAll(String nameLikeFilter, String sortField, String sortDirection, Pageable pageable);
     Category getById(Long id);
     Category update(Long id, CategoryRequest request);
     void deleteById(Long id);

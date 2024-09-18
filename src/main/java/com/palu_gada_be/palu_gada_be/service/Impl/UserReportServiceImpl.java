@@ -2,19 +2,24 @@ package com.palu_gada_be.palu_gada_be.service.Impl;
 
 import com.palu_gada_be.palu_gada_be.dto.request.UserReportRequest;
 import com.palu_gada_be.palu_gada_be.dto.response.UserReportResponse;
-import com.palu_gada_be.palu_gada_be.mapper.UserMapper;
 import com.palu_gada_be.palu_gada_be.mapper.UserReportMapper;
 import com.palu_gada_be.palu_gada_be.model.User;
 import com.palu_gada_be.palu_gada_be.model.UserReport;
 import com.palu_gada_be.palu_gada_be.repository.UserReportRepository;
-import com.palu_gada_be.palu_gada_be.repository.UserRepository;
 import com.palu_gada_be.palu_gada_be.security.JwtService;
 import com.palu_gada_be.palu_gada_be.service.UserReportService;
 import com.palu_gada_be.palu_gada_be.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
+
+import java.util.List;
+
+import static com.palu_gada_be.palu_gada_be.specification.UserReportSpecification.*;
 
 @Service
 @RequiredArgsConstructor
@@ -45,8 +50,13 @@ public class UserReportServiceImpl implements UserReportService {
     }
 
     @Override
-    public Page<UserReportResponse> getAll(Pageable pageable) {
-        Page<UserReport> userReports = userReportRepository.findAll(pageable);
+    public Page<UserReportResponse> getAll(String messageLikeFilter, List<Long> userReportedIds, List<Long> userReportIds, String sortField, String sortDirection, Pageable pageable) {
+        Specification<UserReport> spec = Specification.where(StringUtils.isBlank(messageLikeFilter) ? null : messageLike(messageLikeFilter))
+                .and(CollectionUtils.isEmpty(userReportedIds) ? null : inUserReported(userReportedIds))
+                .and(CollectionUtils.isEmpty(userReportIds) ? null : inUserReport(userReportIds))
+                .and(StringUtils.isBlank(sortField) ? null : sortByField(sortField, sortDirection));
+
+        Page<UserReport> userReports = userReportRepository.findAll(spec, pageable);
 
         return userReports.map(UserReportMapper::toUserReportResponse);
     }

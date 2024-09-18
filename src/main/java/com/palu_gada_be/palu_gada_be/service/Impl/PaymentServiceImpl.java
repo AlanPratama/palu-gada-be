@@ -6,6 +6,7 @@ import com.palu_gada_be.palu_gada_be.dto.request.*;
 import com.palu_gada_be.palu_gada_be.dto.response.MidtransResponse;
 import com.palu_gada_be.palu_gada_be.dto.response.PaymentResponse;
 import com.palu_gada_be.palu_gada_be.mapper.PaymentMapper;
+import com.palu_gada_be.palu_gada_be.model.Bid;
 import com.palu_gada_be.palu_gada_be.model.Payment;
 import com.palu_gada_be.palu_gada_be.model.User;
 import com.palu_gada_be.palu_gada_be.repository.PaymentRepository;
@@ -15,13 +16,17 @@ import com.palu_gada_be.palu_gada_be.service.PaymentService;
 import com.palu_gada_be.palu_gada_be.service.UserService;
 import com.palu_gada_be.palu_gada_be.util.DateTimeUtil;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+
+import static com.palu_gada_be.palu_gada_be.specification.PaymentSpecification.*;
 
 @Service
 @RequiredArgsConstructor
@@ -33,8 +38,12 @@ public class PaymentServiceImpl implements PaymentService {
     private final UserService userService;
 
     @Override
-    public Page<PaymentResponse> getAll(Pageable pageable) {
-        Page<Payment> payments = paymentRepository.findAll(pageable);
+    public Page<PaymentResponse> getAll(String bank, String status, String sortField, String sortDirection, Pageable pageable) {
+        Specification<Payment> spec = Specification.where(StringUtils.isBlank(bank) ? null : bankLike(bank))
+                .and(StringUtils.isBlank(status) ? null : statusLike(status))
+                .and(StringUtils.isBlank(sortField) ? null : sortByField(sortField, sortDirection));
+
+        Page<Payment> payments = paymentRepository.findAll(spec, pageable);
 
         return payments.map(PaymentMapper::toPaymentResponse);
     }

@@ -13,6 +13,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+
 @RestController
 @RequestMapping(ConstantEndpoint.ADMIN_POST_API)
 @RequiredArgsConstructor
@@ -22,46 +24,50 @@ public class AdminPostController {
 
     @GetMapping
     public ResponseEntity<?> getAll(
-        @PageableDefault Pageable pageable
+            @RequestParam(required = false) String title,
+            @RequestParam(required = false) List<Long> districtIds,
+            @RequestParam(required = false) String sortField,
+            @RequestParam(required = false) String sortDirection,
+            @PageableDefault Pageable pageable
     ) {
         return Response.renderJSON(
-            new PageResponse<>(postService.getAll(pageable)),
-            "Success Get All Posts",
-            HttpStatus.OK
+                new PageResponse<>(postService.getAll(title, districtIds, sortField, sortDirection, pageable)),
+                "Success Get All Posts",
+                HttpStatus.OK
         );
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getById(
-        @PathVariable Long id
+            @PathVariable Long id
     ) {
         return Response.renderJSON(
-            postService.getById(id),
-            "Success Get Post",
-            HttpStatus.OK
+                postService.getById(id),
+                "Success Get Post",
+                HttpStatus.OK
         );
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<?> updateStatus(
-        @PathVariable Long id,
-        @RequestParam(value = "status") String request
+            @PathVariable Long id,
+            @RequestParam(value = "status") String request
     ) {
         return Response.renderJSON(
-            postService.updateStatusPost(id, request),
-            "Success Update Post Status",
-            HttpStatus.OK
+                postService.updateStatusPost(id, request),
+                "Success Update Post Status",
+                HttpStatus.OK
         );
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteById(
-        @PathVariable Long id
+            @PathVariable Long id
     ) {
         postService.deleteById(id);
         return Response.renderJSON(
-            id,
-            "Success Delete Post"
+                id,
+                "Success Delete Post"
         );
     }
 }

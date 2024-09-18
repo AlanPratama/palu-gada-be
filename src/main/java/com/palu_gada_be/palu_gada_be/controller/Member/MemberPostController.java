@@ -13,6 +13,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+
 @RestController
 @RequestMapping(ConstantEndpoint.MEMBER_POST_API)
 @RequiredArgsConstructor
@@ -22,35 +24,39 @@ public class MemberPostController {
 
     @GetMapping
     public ResponseEntity<?> getAll(
-        @PageableDefault Pageable pageable
+            @RequestParam(required = false) String title,
+            @RequestParam(required = false) List<Long> districtIds,
+            @RequestParam(required = false) String sortField,
+            @RequestParam(required = false) String sortDirection,
+            @PageableDefault Pageable pageable
     ) {
         return Response.renderJSON(
-            new PageResponse<>(postService.getAll(pageable)),
-            "Success Get Post",
-            HttpStatus.OK
+                new PageResponse<>(postService.getAll(title, districtIds, sortField, sortDirection, pageable)),
+                "Success Get Post",
+                HttpStatus.OK
         );
     }
 
     @GetMapping("/me")
     public ResponseEntity<?> getUserAllPost(
-        @PageableDefault Pageable pageable
+            @PageableDefault Pageable pageable
     ) {
         return Response.renderJSON(
-            new PageResponse<>(postService.getAllByUserId(pageable)),
-            "Success Get Posts",
-            HttpStatus.OK
+                new PageResponse<>(postService.getAllByUserId(pageable)),
+                "Success Get Posts",
+                HttpStatus.OK
         );
     }
 
     @PostMapping
     public ResponseEntity<?> create(
-        @ModelAttribute PostRequest request,
-        @RequestParam(value = "file", required = false) MultipartFile file
+            @ModelAttribute PostRequest request,
+            @RequestParam(value = "file", required = false) MultipartFile file
     ) {
         return Response.renderJSON(
-            postService.create(request, file),
-            "Success Create Post",
-            HttpStatus.CREATED
+                postService.create(request, file),
+                "Success Create Post",
+                HttpStatus.CREATED
         );
     }
 
@@ -69,12 +75,12 @@ public class MemberPostController {
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getPostById(
-        @PathVariable Long id
+            @PathVariable Long id
     ) {
         return Response.renderJSON(
-            postService.getById(id),
-            "Success Get Post",
-            HttpStatus.OK
+                postService.getById(id),
+                "Success Get Post",
+                HttpStatus.OK
         );
     }
 }

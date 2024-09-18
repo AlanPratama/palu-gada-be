@@ -12,6 +12,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping(ConstantEndpoint.ADMIN_POST_REPORT_API)
 @RequiredArgsConstructor
@@ -21,10 +23,13 @@ public class AdminPostReportController {
 
     @GetMapping
     public ResponseEntity<?> getAll(
+            @RequestParam(required = false) String message,
+            @RequestParam(required = false) String sortField,
+            @RequestParam(required = false) String sortDirection,
             @PageableDefault Pageable pageable
     ) {
         return Response.renderJSON(
-                new PageResponse<>(postReportService.getAll(pageable)),
+                new PageResponse<>(postReportService.getAll(message, sortField, sortDirection, pageable)),
                 "Success Get All Post Reports",
                 HttpStatus.OK
         );

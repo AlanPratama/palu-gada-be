@@ -9,8 +9,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+
 public interface UserService {
-    Page<UserResponse> getAll(Pageable pageable);
+    Page<UserResponse> getAll(String nameLikeFilter, List<Long> districtIds, String sortField, String sortDirection, Pageable pageable);
     UserResponse getById(Long id);
     User findById(Long id);
     UserResponse createAdmin(RegisterRequest request);

@@ -3,9 +3,7 @@ package com.palu_gada_be.palu_gada_be.service.Impl;
 import com.palu_gada_be.palu_gada_be.constant.PostStatus;
 import com.palu_gada_be.palu_gada_be.dto.request.PostRequest;
 import com.palu_gada_be.palu_gada_be.dto.response.CloudinaryResponse;
-import com.palu_gada_be.palu_gada_be.dto.response.DistrictResponse;
 import com.palu_gada_be.palu_gada_be.dto.response.PostResponse;
-import com.palu_gada_be.palu_gada_be.dto.response.UserResponse;
 import com.palu_gada_be.palu_gada_be.mapper.PostMapper;
 import com.palu_gada_be.palu_gada_be.model.District;
 import com.palu_gada_be.palu_gada_be.model.Post;
@@ -16,10 +14,13 @@ import com.palu_gada_be.palu_gada_be.security.JwtService;
 import com.palu_gada_be.palu_gada_be.service.*;
 import com.palu_gada_be.palu_gada_be.util.DateTimeUtil;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -27,6 +28,8 @@ import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.palu_gada_be.palu_gada_be.specification.PostSpecification.*;
 
 @Service
 @RequiredArgsConstructor
@@ -103,8 +106,12 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public Page<PostResponse> getAll(Pageable pageable) {
-        Page<Post> posts = postRepository.findAll(pageable);
+    public Page<PostResponse> getAll(String titleLikeFilter, List<Long> districtIds, String sortField, String sortDirection, Pageable pageable) {
+        Specification<Post> spec = Specification.where(StringUtils.isBlank(titleLikeFilter) ? null : titleLike(titleLikeFilter))
+                .and(CollectionUtils.isEmpty(districtIds) ? null : inDistrict(districtIds))
+                .and(StringUtils.isBlank(sortField) ? null : sortByField(sortField, sortDirection));
+
+        Page<Post> posts = postRepository.findAll(spec, pageable);
 
         return posts.map(PostMapper::toPostResponse);
     }

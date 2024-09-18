@@ -1,6 +1,7 @@
 package com.palu_gada_be.palu_gada_be.controller.Member;
 
 import com.palu_gada_be.palu_gada_be.constant.ConstantEndpoint;
+import com.palu_gada_be.palu_gada_be.dto.request.ChangePasswordRequest;
 import com.palu_gada_be.palu_gada_be.dto.request.ResetPasswordRequest;
 import com.palu_gada_be.palu_gada_be.dto.request.UserUpdateRequest;
 import com.palu_gada_be.palu_gada_be.service.MemberService;
@@ -49,6 +50,17 @@ public class MemberUserController {
         return Response.renderJSON(
                 memberService.resetPassword(request),
                 "Success Reset Password",
+                HttpStatus.OK
+        );
+    }
+
+    @PostMapping("/change-password")
+    public ResponseEntity<?> changePassword(
+            @RequestBody ChangePasswordRequest request
+    ) {
+        return Response.renderJSON(
+                memberService.changePassword(request),
+                "Success Change Password",
                 HttpStatus.OK
         );
     }

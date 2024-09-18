@@ -12,6 +12,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping(ConstantEndpoint.ADMIN_USER_REPORT_API)
 @RequiredArgsConstructor
@@ -21,10 +23,15 @@ public class AdminUserReportController {
 
     @GetMapping
     public ResponseEntity<?> getAllUserReports(
+            @RequestParam(required = false) String message,
+            @RequestParam(required = false) List<Long> userReportedIds,
+            @RequestParam(required = false) List<Long> userReportIds,
+            @RequestParam(required = false) String sortField,
+            @RequestParam(required = false) String sortDirection,
             @PageableDefault Pageable pageable
     ) {
         return Response.renderJSON(
-                new PageResponse<>(userReportService.getAll(pageable)),
+                new PageResponse<>(userReportService.getAll(message, userReportedIds, userReportIds, sortField, sortDirection, pageable)),
                 "Success Get User Reports",
                 HttpStatus.OK
         );

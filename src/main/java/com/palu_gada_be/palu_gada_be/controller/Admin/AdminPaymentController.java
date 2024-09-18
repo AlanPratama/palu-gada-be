@@ -21,10 +21,14 @@ public class AdminPaymentController {
 
     @GetMapping
     public ResponseEntity<?> getAllPayments(
+            @RequestParam(required = false) String bank,
+            @RequestParam(required = false) String status,
+            @RequestParam(required = false) String sortField,
+            @RequestParam(required = false) String sortDirection,
             @PageableDefault Pageable pageable
     ) {
         return Response.renderJSON(
-                new PageResponse<>(paymentService.getAll(pageable)),
+                new PageResponse<>(paymentService.getAll(bank, status, sortField, sortDirection, pageable)),
                 "Success Get All Payments",
                 HttpStatus.OK
         );

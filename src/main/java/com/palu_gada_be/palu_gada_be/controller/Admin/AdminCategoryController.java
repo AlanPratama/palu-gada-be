@@ -21,10 +21,13 @@ public class AdminCategoryController {
 
     @GetMapping
     public ResponseEntity<?> getAll(
+        @RequestParam(required = false) String name,
+        @RequestParam(required = false) String sortField,
+        @RequestParam(required = false) String sortDirection,
         @PageableDefault Pageable pageable
     ) {
         return Response.renderJSON(
-                new PageResponse<>(categoryService.getAll(pageable)),
+                new PageResponse<>(categoryService.getAll(name, sortField, sortDirection, pageable)),
                 "Success Get Categories",
                 HttpStatus.OK
         );

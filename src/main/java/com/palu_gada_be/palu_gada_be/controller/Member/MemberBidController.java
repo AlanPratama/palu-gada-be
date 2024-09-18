@@ -20,7 +20,9 @@ public class MemberBidController {
     private final BidService bidService;
 
     @GetMapping
-    public ResponseEntity<?> getUserAllBids(@PageableDefault Pageable pageable) {
+    public ResponseEntity<?> getUserAllBids(
+            @PageableDefault Pageable pageable
+    ) {
         return Response.renderJSON(
                 new PageResponse<>(bidService.getAllByUserId(pageable)),
                 "Success Get Bids",
