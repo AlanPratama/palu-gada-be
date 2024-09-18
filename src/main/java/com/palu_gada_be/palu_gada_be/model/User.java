@@ -58,6 +58,9 @@ public class User implements UserDetails {
     @Min(value = 0, message = "Balance must be at least 0")
     private Long balance;
 
+    @Column(name = "cloudinaryPublicId")
+    private String cloudinaryPublicId;
+
     @Column(name = "photoUrl")
     private String photoUrl;
 

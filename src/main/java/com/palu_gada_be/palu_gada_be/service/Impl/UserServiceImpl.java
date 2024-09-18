@@ -8,17 +8,11 @@ import com.palu_gada_be.palu_gada_be.dto.request.UserUpdateRequest;
 import com.palu_gada_be.palu_gada_be.dto.response.CloudinaryResponse;
 import com.palu_gada_be.palu_gada_be.dto.response.UserResponse;
 import com.palu_gada_be.palu_gada_be.mapper.UserMapper;
-import com.palu_gada_be.palu_gada_be.model.PostCategory;
-import com.palu_gada_be.palu_gada_be.model.Role;
-import com.palu_gada_be.palu_gada_be.model.User;
-import com.palu_gada_be.palu_gada_be.model.UserCategory;
+import com.palu_gada_be.palu_gada_be.model.*;
 import com.palu_gada_be.palu_gada_be.repository.RoleRepository;
 import com.palu_gada_be.palu_gada_be.repository.UserRepository;
 import com.palu_gada_be.palu_gada_be.security.JwtService;
-import com.palu_gada_be.palu_gada_be.service.CategoryService;
-import com.palu_gada_be.palu_gada_be.service.CloudinaryService;
-import com.palu_gada_be.palu_gada_be.service.UserCategoyService;
-import com.palu_gada_be.palu_gada_be.service.UserService;
+import com.palu_gada_be.palu_gada_be.service.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -44,6 +38,7 @@ public class UserServiceImpl implements UserService {
     private final CloudinaryService cloudinaryService;
     private final CategoryService categoryService;
     private final UserCategoyService userCategoyService;
+    private final DistrictService districtService;
 
     @Override
     public Page<UserResponse> getAll(Pageable pageable) {
@@ -95,6 +90,7 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public UserResponse updateById(Long id, UserUpdateRequest updatedUser, MultipartFile file) {
         User user = findById(id);
+        District district = districtService.getById(updatedUser.getDistrictId());
 
         if (file != null && !file.isEmpty()){
             try {
@@ -122,6 +118,7 @@ public class UserServiceImpl implements UserService {
             throw new RuntimeException("Categories not found");
         }
 
+        user.setDistrict(district);
         user.setPhone(updatedUser.getPhone());
         user.setAddress(updatedUser.getAddress());
         user.setName(updatedUser.getName());
