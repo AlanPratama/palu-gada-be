@@ -13,6 +13,7 @@ public class ConstantEndpoint {
     public static final String MEMBER_USER_REPORT_API = "/api/v1/user-reports";
     public static final String MEMBER_REVIEW_API = "/api/v1/reviews";
     public static final String MEMBER_POST_REPORT_API = "/api/v1/post-reports";
+    public static final String MEMBER_NOTIFICATION_API = "/api/v1/notifications";
 
     /* ADMIN ENDPOINT */
     public static final String ADMIN_USER_API = "/api/v1/admin/users";
