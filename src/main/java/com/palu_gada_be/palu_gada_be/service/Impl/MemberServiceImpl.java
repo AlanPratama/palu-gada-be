@@ -1,5 +1,6 @@
 package com.palu_gada_be.palu_gada_be.service.Impl;
 
+import com.palu_gada_be.palu_gada_be.dto.request.ChangePasswordRequest;
 import com.palu_gada_be.palu_gada_be.dto.request.ResetPasswordRequest;
 import com.palu_gada_be.palu_gada_be.model.User;
 import com.palu_gada_be.palu_gada_be.repository.UserRepository;
@@ -27,6 +28,23 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public User resetPassword(ResetPasswordRequest request) {
         User userAuthenticated = getAuthentication();
+        if (!(request.getPassword().equals(request.getPasswordConfirm()))){
+            throw new RuntimeException("Password not match");
+        }
+
+        userAuthenticated.setPassword(passwordEncoder.encode(request.getPassword()));
+
+        return userRepository.save(userAuthenticated);
+    }
+
+    @Override
+    public User changePassword(ChangePasswordRequest request) {
+        User userAuthenticated = getAuthentication();
+
+        if (!passwordEncoder.matches(request.getOldPassword(), userAuthenticated.getPassword())) {
+            throw new RuntimeException("Old password is incorrect");
+        }
+
         if (!(request.getPassword().equals(request.getPasswordConfirm()))){
             throw new RuntimeException("Password not match");
         }
