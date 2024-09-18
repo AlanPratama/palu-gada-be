@@ -27,7 +27,7 @@ public class Bid {
     private Long id;
 
     @ManyToOne
-    @JsonIgnore
+//    @JsonIgnore
     @JoinColumn(name = "userId")
     private User user;
 
