@@ -2,9 +2,7 @@ package com.palu_gada_be.palu_gada_be.service.Impl;
 
 import com.palu_gada_be.palu_gada_be.dto.request.PostReportRequest;
 import com.palu_gada_be.palu_gada_be.dto.response.PostReportResponse;
-import com.palu_gada_be.palu_gada_be.mapper.PostMapper;
 import com.palu_gada_be.palu_gada_be.mapper.PostReportMapper;
-import com.palu_gada_be.palu_gada_be.mapper.UserMapper;
 import com.palu_gada_be.palu_gada_be.model.Post;
 import com.palu_gada_be.palu_gada_be.model.PostReport;
 import com.palu_gada_be.palu_gada_be.model.User;
@@ -38,28 +36,28 @@ public class PostReportServiceImpl implements PostReportService {
 
         PostReport createdPostReport = postReportRepository.save(postReport);
 
-        return PostReportMapper.toPaymentResponse(createdPostReport);
+        return PostReportMapper.toPostReportResponse(createdPostReport);
     }
 
     @Override
     public Page<PostReportResponse> getAll(Pageable pageable) {
         Page<PostReport> postReports = postReportRepository.findAll(pageable);
 
-        return postReports.map(PostReportMapper::toPaymentResponse);
+        return postReports.map(PostReportMapper::toPostReportResponse);
     }
 
     @Override
     public Page<PostReportResponse> getByUserId(Long id, Pageable pageable) {
         Page<PostReport> postReports = postReportRepository.findByUserId(id, pageable);
 
-        return postReports.map(PostReportMapper::toPaymentResponse);
+        return postReports.map(PostReportMapper::toPostReportResponse);
     }
 
     @Override
     public Page<PostReportResponse> getByPostId(Long id, Pageable pageable) {
         Page<PostReport> postReports = postReportRepository.findByPostId(id, pageable);
 
-        return postReports.map(PostReportMapper::toPaymentResponse);
+        return postReports.map(PostReportMapper::toPostReportResponse);
     }
 
     @Override
@@ -80,13 +78,20 @@ public class PostReportServiceImpl implements PostReportService {
     public PostReportResponse getById(Long id) {
         PostReport postReport = this.findById(id);
 
-        return PostReportMapper.toPaymentResponse(postReport);
+        return PostReportMapper.toPostReportResponse(postReport);
     }
 
     @Override
     public PostReportResponse update(Long id, PostReportRequest request) {
+        PostReport postReport = this.findById(id);
+        User user = jwtService.getUserAuthenticated();
 
+        if (!postReport.getUser().getId().equals(user.getId())){
+            throw new RuntimeException("You cannot update post report when it's not yours");
+        }
 
-        return null;
+        postReport.setMessage(request.getMessage());
+
+        return PostReportMapper.toPostReportResponse(postReport);
     }
 }
