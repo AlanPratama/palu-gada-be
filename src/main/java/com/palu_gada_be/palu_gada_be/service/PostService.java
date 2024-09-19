@@ -12,7 +12,7 @@ import java.util.List;
 public interface PostService {
     PostResponse create(PostRequest request, MultipartFile file);
     Page<PostResponse> getAll(String titleLikeFilter, List<Long> districtId, String sortField, String sortDirection, Pageable pageable);
-    Page<PostResponse> getAllByUserId(Pageable pageable);
+    Page<PostResponse> getAllByUserId(String titleLikeFilter, String sortField, String sortDirection, Pageable pageable);
     PostResponse getById(Long id);
     PostResponse updateStatusPost(Long id, String status);
     Post findById(Long id);

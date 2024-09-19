@@ -40,10 +40,13 @@ public class MemberPostController {
 
     @GetMapping("/me")
     public ResponseEntity<?> getUserAllPost(
+            @RequestParam(required = false) String title,
+            @RequestParam(required = false) String sortField,
+            @RequestParam(required = false) String sortDirection,
             @PageableDefault Pageable pageable
     ) {
         return Response.renderJSON(
-                new PageResponse<>(postService.getAllByUserId(pageable)),
+                new PageResponse<>(postService.getAllByUserId(title, sortField, sortDirection, pageable)),
                 "Success Get Posts",
                 HttpStatus.OK
         );

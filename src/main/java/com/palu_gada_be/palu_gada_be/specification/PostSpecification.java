@@ -7,6 +7,10 @@ import java.util.List;
 
 
 public class PostSpecification {
+    public static Specification<Post> byUserId(Long userId) {
+        return (root, query, builder) -> builder.equal(root.get("user").get("id"), userId);
+    }
+
     // First request parameter filter: Get Users with title like a specific string
     public static Specification<Post> titleLike(String titleLike) {
         return (root, query, builder) -> builder.like(root.get("title"), "%" + titleLike + "%");
