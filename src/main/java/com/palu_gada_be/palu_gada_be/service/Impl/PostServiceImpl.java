@@ -114,9 +114,14 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public Page<PostResponse> getAllByUserId(Pageable pageable) {
+    public Page<PostResponse> getAllByUserId(String titleLikeFilter, String sortField, String sortDirection, Pageable pageable) {
         Long id = jwtService.getUserAuthenticated().getId();
-        Page<Post> posts = postRepository.findByUserId(id, pageable);
+
+        Specification<Post> spec = Specification.where(byUserId(id))
+                .and(StringUtils.isBlank(titleLikeFilter) ? null : titleLike(titleLikeFilter))
+                .and(StringUtils.isBlank(sortField) ? null : sortByField(sortField, sortDirection));
+
+        Page<Post> posts = postRepository.findAll(spec, pageable);
 
         return posts.map(PostMapper::toPostResponse);
     }
