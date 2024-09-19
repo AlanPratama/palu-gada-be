@@ -38,9 +38,6 @@ public class Payment {
     @Column(name = "amount", nullable = false)
     private Long amount;
 
-    @Column(name = "fee", nullable = false)
-    private Long fee;
-
     @Column(name = "vaNumber", nullable = false)
     private String vaNumber;
 

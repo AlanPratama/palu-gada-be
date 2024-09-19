@@ -77,6 +77,18 @@ public class MemberPostController {
         );
     }
 
+    @PutMapping("/{id}/status")
+    public ResponseEntity<?> updateStatus(
+            @PathVariable Long id,
+            @RequestParam(value = "status") String request
+    ) {
+        return Response.renderJSON(
+                postService.updateStatusPost(id, request),
+                "Success Update Post Status",
+                HttpStatus.OK
+        );
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<?> getPostById(
             @PathVariable Long id

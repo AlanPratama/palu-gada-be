@@ -155,7 +155,7 @@ public class PostServiceImpl implements PostService {
 
     @Override
     @Transactional
-    public Post updateById(Long id, PostRequest request, MultipartFile file) {
+    public PostResponse updateById(Long id, PostRequest request, MultipartFile file) {
         Post existingPost = findById(id);
 
         District newDistrict = districtService.getById(request.getDistrictId());
@@ -177,7 +177,9 @@ public class PostServiceImpl implements PostService {
             }
         }
 
-        return postRepository.save(existingPost);
+        Post savedPost = postRepository.save(existingPost);
+
+        return PostMapper.toPostResponse(savedPost);
     }
 
     @Override

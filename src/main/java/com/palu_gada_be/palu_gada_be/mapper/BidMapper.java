@@ -13,6 +13,7 @@ public class BidMapper {
                 .user(UserMapper.toUserResponse(bid.getUser()))
                 .post(PostMapper.toPostResponse(bid.getPost()))
                 .amount(bid.getAmount())
+                .fee(bid.getFee())
                 .message(bid.getMessage())
                 .status(bid.getBidStatus())
                 .createdAt(DateTimeUtil.convertLocalDateTimeToString(bid.getCreatedAt(), "yyyy-MM-dd HH:mm:ss"))

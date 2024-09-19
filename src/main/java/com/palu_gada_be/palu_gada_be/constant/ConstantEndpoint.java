@@ -14,6 +14,7 @@ public class ConstantEndpoint {
     public static final String MEMBER_REVIEW_API = "/api/v1/reviews";
     public static final String MEMBER_POST_REPORT_API = "/api/v1/post-reports";
     public static final String MEMBER_NOTIFICATION_API = "/api/v1/notifications";
+    public static final String MEMBER_PAYOUT_API = "/api/v1/payouts";
 
     /* ADMIN ENDPOINT */
     public static final String ADMIN_USER_API = "/api/v1/admin/users";
@@ -25,6 +26,7 @@ public class ConstantEndpoint {
     public static final String ADMIN_USER_REPORT_API = "/api/v1/admin/user-reports";
     public static final String ADMIN_REVIEW_API = "/api/v1/admin/reviews";
     public static final String ADMIN_POST_REPORT_API = "/api/v1/admin/post-reports";
+    public static final String ADMIN_PAYOUT_API = "/api/v1/admin/payouts";
 
     /* FILE ENDPOINT */
     public static final String FILE_API = "/api/v1/files";

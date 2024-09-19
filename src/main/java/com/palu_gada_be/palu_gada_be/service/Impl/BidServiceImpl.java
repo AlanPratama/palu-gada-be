@@ -1,6 +1,7 @@
 package com.palu_gada_be.palu_gada_be.service.Impl;
 
 import com.palu_gada_be.palu_gada_be.constant.BidStatus;
+import com.palu_gada_be.palu_gada_be.constant.ConstantPayment;
 import com.palu_gada_be.palu_gada_be.dto.request.BidRequest;
 import com.palu_gada_be.palu_gada_be.dto.response.BidResponse;
 import com.palu_gada_be.palu_gada_be.mapper.BidMapper;
@@ -22,6 +23,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import static com.palu_gada_be.palu_gada_be.specification.BidSpecification.*;
@@ -52,11 +54,17 @@ public class BidServiceImpl implements BidService {
         }
 
 
+        BigDecimal temp = BigDecimal.valueOf(request.getAmount())
+                .multiply(BigDecimal.valueOf(ConstantPayment.FEE_FIX_RATE));
+
+        Long fee = temp.longValue();
+
         Bid bid = Bid.builder()
                 .user(user)
                 .post(post)
                 .amount(request.getAmount())
                 .message(request.getMessage())
+                .fee(fee)
                 .bidStatus(BidStatus.PENDING)
                 .build();
 
@@ -114,10 +122,10 @@ public class BidServiceImpl implements BidService {
                             .bid(bid)
                             .balance(bid.getAmount())
                             .build();
-                    userService.updateBalance(post.getUser().getId(), Math.abs(bid.getAmount()) * -1);
+                    userService.updateBalance(post.getUser().getId(), (Math.abs(bid.getAmount()) * -1) - bid.getFee());
                     pendingBidService.create(pendingBid);
                 } catch (Exception e) {
-                    e.printStackTrace(); // Logging error untuk mempermudah debugging
+                    e.printStackTrace();
                     throw new RuntimeException("Cannot Accept Bid, Balance Not Enough", e);
                 }
             }
@@ -136,7 +144,7 @@ public class BidServiceImpl implements BidService {
                     userService.updateBalance(bid.getUser().getId(), bid.getAmount());
                     pendingBidService.delete(existingPendingBid.getId());
                 } catch (Exception e) {
-                    e.printStackTrace(); // Logging untuk error handling
+                    e.printStackTrace();
                     throw new RuntimeException("Cannot Finish Bid, Accept First", e);
                 }
             }

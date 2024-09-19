@@ -1,6 +1,7 @@
 package com.palu_gada_be.palu_gada_be.dto.response;
 
-import com.palu_gada_be.palu_gada_be.constant.BidStatus;
+import com.palu_gada_be.palu_gada_be.constant.PayoutStatus;
+import com.palu_gada_be.palu_gada_be.constant.PayoutType;
 import lombok.*;
 
 @Setter
@@ -8,14 +9,13 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class BidResponse {
+public class PayoutResponse {
     private Long id;
     private UserResponse user;
-    private PostResponse post;
     private Long amount;
-    private Long fee;
-    private String message;
-    private BidStatus status;
+    private PayoutType payoutType;
+    private String destinationNumber;
+    private PayoutStatus payoutStatus;
     private String createdAt;
     private String updatedAt;
 }

@@ -38,13 +38,13 @@ public class User implements UserDetails {
     @Column(name = "name", nullable = true)
     private String name;
 
-    @Column(name = "phone", nullable = true)
+    @Column(name = "phone", unique = true, nullable = true)
     private String phone;
 
-    @Column(name = "email", nullable = true)
+    @Column(name = "email", unique = true, nullable = true)
     private String email;
 
-    @Column(name = "username", nullable = false)
+    @Column(name = "username", unique = true, nullable = false)
     private String username;
 
     @Column(name = "password", nullable = false)
@@ -54,11 +54,17 @@ public class User implements UserDetails {
     @Column(name = "address")
     private String address;
 
+    @Column(name = "about", nullable = true)
+    private String about;
+
+    @Column(name = "nik", unique = true)
+    private String nik;
+
     @Column(name = "balance", nullable = false)
     @Min(value = 0, message = "Balance must be at least 0")
     private Long balance;
 
-    @Column(name = "bankAccount")
+    @Column(name = "bankAccount", unique = true)
     private String bankAccount;
 
     @Column(name = "cloudinaryPublicId")
@@ -101,6 +107,10 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "user")
     @JsonIgnore
     private List<Review> reviews = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user")
+    @JsonIgnore
+    private List<Payout> payouts = new ArrayList<>();
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(

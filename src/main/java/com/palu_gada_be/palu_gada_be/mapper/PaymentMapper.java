@@ -12,7 +12,6 @@ public class PaymentMapper {
                 .transferDate(DateTimeUtil.convertLocalDateTimeToString(payment.getTransferDate(), "dd-MM-yyyy HH:mm:ss"))
                 .bank(payment.getBank())
                 .amount(payment.getAmount())
-                .fee(payment.getFee())
                 .vaNumber(payment.getVaNumber())
                 .paymentType(payment.getPaymentType())
                 .expiryTime(payment.getExpiryTime())

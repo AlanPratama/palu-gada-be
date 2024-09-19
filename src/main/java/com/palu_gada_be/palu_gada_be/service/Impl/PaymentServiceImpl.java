@@ -6,7 +6,6 @@ import com.palu_gada_be.palu_gada_be.dto.request.*;
 import com.palu_gada_be.palu_gada_be.dto.response.MidtransResponse;
 import com.palu_gada_be.palu_gada_be.dto.response.PaymentResponse;
 import com.palu_gada_be.palu_gada_be.mapper.PaymentMapper;
-import com.palu_gada_be.palu_gada_be.model.Bid;
 import com.palu_gada_be.palu_gada_be.model.Payment;
 import com.palu_gada_be.palu_gada_be.model.User;
 import com.palu_gada_be.palu_gada_be.repository.PaymentRepository;
@@ -90,7 +89,6 @@ public class PaymentServiceImpl implements PaymentService {
                 .bank(request.getBank())
                 .user(authenticated)
                 .transferDate(LocalDateTime.now())
-                .fee(ConstantPayment.FEE)
                 .amount(request.getAmount())
                 .paymentType(request.getPaymentType())
                 .paymentStatus(PaymentStatus.PENDING)

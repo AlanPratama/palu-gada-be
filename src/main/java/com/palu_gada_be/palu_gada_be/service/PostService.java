@@ -16,6 +16,6 @@ public interface PostService {
     PostResponse getById(Long id);
     PostResponse updateStatusPost(Long id, String status);
     Post findById(Long id);
-    Post updateById(Long id, PostRequest request, MultipartFile file);
+    PostResponse updateById(Long id, PostRequest request, MultipartFile file);
     void deleteById(Long id);
 }
