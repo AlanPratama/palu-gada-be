@@ -7,9 +7,11 @@ import com.palu_gada_be.palu_gada_be.dto.request.UserUpdateRequest;
 import com.palu_gada_be.palu_gada_be.service.MemberService;
 import com.palu_gada_be.palu_gada_be.service.UserService;
 import com.palu_gada_be.palu_gada_be.util.Response;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -18,13 +20,12 @@ import org.springframework.web.multipart.MultipartFile;
 @RequiredArgsConstructor
 public class MemberUserController {
 
-    private final MemberService memberService;
     private final UserService userService;
 
     @GetMapping
     public ResponseEntity<?> getAuthenticated() {
         return Response.renderJSON(
-                memberService.getAuthentication(),
+                userService.getAuthentication(),
                 "Success Get Data Member",
                 HttpStatus.OK
         );
@@ -32,7 +33,7 @@ public class MemberUserController {
 
     @PutMapping
     public ResponseEntity<?> updateUser(
-        @ModelAttribute UserUpdateRequest user,
+        @Valid @ModelAttribute UserUpdateRequest user,
         @RequestParam(value = "file", required = false) MultipartFile file
     ) {
         return Response.renderJSON(
@@ -44,23 +45,23 @@ public class MemberUserController {
 
     @PutMapping("/update-password")
     public ResponseEntity<?> resetPassword(
-            @RequestBody ResetPasswordRequest request
+            @Valid @RequestBody ResetPasswordRequest request
     ) {
         return Response.renderJSON(
-                memberService.resetPassword(request),
+                userService.resetPassword(request),
                 "Success Reset Password",
                 HttpStatus.OK
         );
     }
 
-    @PostMapping("/change-password")
-    public ResponseEntity<?> changePassword(
-            @RequestBody ChangePasswordRequest request
-    ) {
-        return Response.renderJSON(
-                memberService.changePassword(request),
-                "Success Change Password",
-                HttpStatus.OK
-        );
-    }
+//    @PostMapping("/change-password")
+//    public ResponseEntity<?> changePassword(
+//            @Valid @RequestBody ChangePasswordRequest request
+//    ) {
+//        return Response.renderJSON(
+//                memberService.changePassword(request),
+//                "Success Change Password",
+//                HttpStatus.OK
+//        );
+//    }
 }

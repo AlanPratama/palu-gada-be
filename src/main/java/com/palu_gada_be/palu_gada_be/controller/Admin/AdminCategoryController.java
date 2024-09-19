@@ -5,6 +5,7 @@ import com.palu_gada_be.palu_gada_be.dto.request.CategoryRequest;
 import com.palu_gada_be.palu_gada_be.service.CategoryService;
 import com.palu_gada_be.palu_gada_be.util.PageResponse;
 import com.palu_gada_be.palu_gada_be.util.Response;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -35,7 +36,7 @@ public class AdminCategoryController {
 
     @PostMapping
     public ResponseEntity<?> create(
-        @RequestBody CategoryRequest request
+        @Valid @RequestBody CategoryRequest request
     ) {
        return Response.renderJSON(
                categoryService.create(request),
@@ -58,7 +59,7 @@ public class AdminCategoryController {
     @PutMapping("/{id}")
     public ResponseEntity<?> update(
         @PathVariable Long id,
-        @RequestBody CategoryRequest request
+        @Valid @RequestBody CategoryRequest request
     ) {
         return Response.renderJSON(
             categoryService.update(id, request),

@@ -2,10 +2,12 @@ package com.palu_gada_be.palu_gada_be.controller.Admin;
 
 import com.palu_gada_be.palu_gada_be.constant.ConstantEndpoint;
 import com.palu_gada_be.palu_gada_be.dto.request.RegisterRequest;
+import com.palu_gada_be.palu_gada_be.dto.request.ResetPasswordRequest;
 import com.palu_gada_be.palu_gada_be.dto.request.UserUpdateRequest;
 import com.palu_gada_be.palu_gada_be.service.UserService;
 import com.palu_gada_be.palu_gada_be.util.PageResponse;
 import com.palu_gada_be.palu_gada_be.util.Response;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -37,7 +39,7 @@ public class AdminUserController {
 
     @PostMapping
     public ResponseEntity<?> createAdmin(
-            @RequestBody RegisterRequest request
+            @Valid @RequestBody RegisterRequest request
     ) {
         return Response.renderJSON(
                 userService.createAdmin(request),
@@ -59,12 +61,23 @@ public class AdminUserController {
 
     @PutMapping
     public ResponseEntity<?> updateUser(
-            @ModelAttribute UserUpdateRequest user,
+            @Valid @ModelAttribute UserUpdateRequest user,
             @RequestParam(value = "file", required = false) MultipartFile file
     ) {
         return Response.renderJSON(
                 userService.updateById(user, file),
                 "Success Update User",
+                HttpStatus.OK
+        );
+    }
+
+    @PutMapping("/update-password")
+    public ResponseEntity<?> resetPassword(
+            @Valid @RequestBody ResetPasswordRequest request
+    ) {
+        return Response.renderJSON(
+                userService.resetPassword(request),
+                "Success Reset Password",
                 HttpStatus.OK
         );
     }

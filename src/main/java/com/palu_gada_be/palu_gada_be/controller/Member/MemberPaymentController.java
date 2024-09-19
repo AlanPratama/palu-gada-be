@@ -5,6 +5,7 @@ import com.palu_gada_be.palu_gada_be.dto.request.PaymentRequest;
 import com.palu_gada_be.palu_gada_be.service.PaymentService;
 import com.palu_gada_be.palu_gada_be.util.PageResponse;
 import com.palu_gada_be.palu_gada_be.util.Response;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -32,7 +33,7 @@ public class MemberPaymentController {
 
     @PostMapping
     public ResponseEntity<?> createPayment(
-            @RequestBody PaymentRequest request
+            @Valid @RequestBody PaymentRequest request
     ) throws Exception {
         return Response.renderJSON(
                 paymentService.create(request),

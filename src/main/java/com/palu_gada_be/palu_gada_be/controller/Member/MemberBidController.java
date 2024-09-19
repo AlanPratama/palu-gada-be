@@ -5,6 +5,7 @@ import com.palu_gada_be.palu_gada_be.dto.request.BidRequest;
 import com.palu_gada_be.palu_gada_be.service.BidService;
 import com.palu_gada_be.palu_gada_be.util.PageResponse;
 import com.palu_gada_be.palu_gada_be.util.Response;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -31,7 +32,9 @@ public class MemberBidController {
     }
 
     @PostMapping
-    public ResponseEntity<?> createBid(@RequestBody BidRequest request) {
+    public ResponseEntity<?> createBid(
+            @Valid @RequestBody BidRequest request
+    ) {
         return Response.renderJSON(
                 bidService.create(request),
                 "Success Create Bid",

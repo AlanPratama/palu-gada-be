@@ -5,6 +5,7 @@ import com.palu_gada_be.palu_gada_be.dto.request.PostReportRequest;
 import com.palu_gada_be.palu_gada_be.service.PostReportService;
 import com.palu_gada_be.palu_gada_be.util.PageResponse;
 import com.palu_gada_be.palu_gada_be.util.Response;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -32,7 +33,7 @@ public class MemberPostReportController {
 
     @PostMapping
     public ResponseEntity<?> create(
-            @RequestBody PostReportRequest request
+            @Valid @RequestBody PostReportRequest request
     ) {
         return Response.renderJSON(
                 postReportService.create(request),
@@ -67,7 +68,7 @@ public class MemberPostReportController {
     @PutMapping("/{id}")
     public ResponseEntity<?> update(
             @PathVariable Long id,
-            @RequestBody PostReportRequest request
+            @Valid @RequestBody PostReportRequest request
     ) {
         return Response.renderJSON(
                 postReportService.update(id, request),

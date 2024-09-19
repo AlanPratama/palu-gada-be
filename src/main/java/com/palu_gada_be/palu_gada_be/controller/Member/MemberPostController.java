@@ -5,6 +5,7 @@ import com.palu_gada_be.palu_gada_be.dto.request.PostRequest;
 import com.palu_gada_be.palu_gada_be.service.PostService;
 import com.palu_gada_be.palu_gada_be.util.PageResponse;
 import com.palu_gada_be.palu_gada_be.util.Response;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -50,7 +51,7 @@ public class MemberPostController {
 
     @PostMapping
     public ResponseEntity<?> create(
-            @ModelAttribute PostRequest request,
+            @Valid @ModelAttribute PostRequest request,
             @RequestParam(value = "file", required = false) MultipartFile file
     ) {
         return Response.renderJSON(
@@ -63,7 +64,7 @@ public class MemberPostController {
     @PutMapping("/{id}")
     public ResponseEntity<?> update(
             @PathVariable Long id,
-            @ModelAttribute PostRequest request,
+            @Valid @ModelAttribute PostRequest request,
             @RequestParam(value = "file", required = false) MultipartFile file
     ) {
         return Response.renderJSON(
