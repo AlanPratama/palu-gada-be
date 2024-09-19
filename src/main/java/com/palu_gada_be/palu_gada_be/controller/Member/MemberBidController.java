@@ -68,4 +68,15 @@ public class MemberBidController {
                 HttpStatus.OK
         );
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteBid(
+            @PathVariable Long id
+    ) {
+        bidService.deleteById(id);
+        return Response.renderJSON(
+                id,
+                "Success Delete Bid"
+        );
+    }
 }

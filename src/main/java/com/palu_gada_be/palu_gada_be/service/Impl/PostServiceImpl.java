@@ -1,5 +1,6 @@
 package com.palu_gada_be.palu_gada_be.service.Impl;
 
+import com.palu_gada_be.palu_gada_be.constant.BidStatus;
 import com.palu_gada_be.palu_gada_be.constant.PostStatus;
 import com.palu_gada_be.palu_gada_be.dto.request.PostRequest;
 import com.palu_gada_be.palu_gada_be.dto.response.CloudinaryResponse;
@@ -28,6 +29,7 @@ import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.palu_gada_be.palu_gada_be.specification.PostSpecification.*;
 
@@ -48,12 +50,7 @@ public class PostServiceImpl implements PostService {
         User user = jwtService.getUserAuthenticated();
         District district = districtService.getById(request.getDistrictId());
 
-        LocalDateTime deadline;
-        if (request.getDeadline() != null && !request.getDeadline().isEmpty()) {
-            deadline = DateTimeUtil.convertStringToLocalDateTime(request.getDeadline(), "yyyy-MM-dd HH:mm:ss");
-        } else {
-            deadline = LocalDateTime.now().plus(30, ChronoUnit.DAYS);
-        }
+        LocalDateTime deadline = LocalDateTime.now().plus(30, ChronoUnit.DAYS);
 
         if (request.getBudgetMin() > request.getBudgetMax()) {
             throw new RuntimeException("Budget must be valid");
@@ -180,6 +177,15 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public void deleteById(Long id) {
+        Post post = this.findById(id);
+
+        if (
+                post.getBids().stream().anyMatch(bid -> bid.getBidStatus().equals(BidStatus.ACCEPTED)) ||
+                post.getBids().stream().anyMatch(bid -> bid.getBidStatus().equals(BidStatus.FINISH))
+        ) {
+            throw new RuntimeException("Cannot Delete Post when on progress bid accepted");
+        }
+
         postRepository.delete(findById(id));
     }
 }

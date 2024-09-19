@@ -19,6 +19,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -164,15 +165,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Transactional
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public User updateBalance(Long id, Long amount) {
         User user = findById(id);
-        try {
-            user.setBalance(user.getBalance() + amount);
-            userRepository.save(user);
-        } catch (Exception ex){
-            throw ex;
-        }
+        user.setBalance(user.getBalance() + amount);
+        userRepository.save(user);
         return user;
     }
 

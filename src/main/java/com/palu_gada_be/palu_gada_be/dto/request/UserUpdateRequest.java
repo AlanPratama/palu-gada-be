@@ -29,7 +29,7 @@ public class UserUpdateRequest {
     @Pattern(regexp = "^\\d{4}-\\d{2}-\\d{2}$", message = "Tanggal lahir harus format YYYY-MM-DD")
     private String birthDate;
 
-    @Pattern(regexp = "^(male|female|other)$", message = "Jenis Kelamin harus Male dan Female")
+    @Pattern(regexp = "^(Male|Female|other)$", message = "Jenis Kelamin harus Male dan Female")
     private String userGender;
 
     private List<Long> userCategoriesId;

@@ -71,9 +71,10 @@ public class AdminBidController {
         );
     }
 
-    // Endpoint to delete a bid by ID
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteBidById(@PathVariable Long id) {
+    public ResponseEntity<?> deleteBidById(
+            @PathVariable Long id
+    ) {
         bidService.deleteById(id);
         return Response.renderJSON(
                 null,

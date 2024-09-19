@@ -36,10 +36,6 @@ public class PostRequest {
     @Min(value = 1, message = "Budget maksimum harus lebih besar atau sama dengan 1")
     private Long budgetMax;
 
-    @NotBlank(message = "Deadline tidak boleh kosong")
-    @Pattern(regexp = "^\\d{4}-\\d{2}-\\d{2}$", message = "Deadline harus dalam format YYYY-MM-DD")
-    private String deadline;
-
     private List<Long> categoriesId;
 
     @NotNull(message = "Hari selesai tidak boleh kosong")

@@ -22,6 +22,8 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 import static com.palu_gada_be.palu_gada_be.specification.BidSpecification.*;
 
 @Service
@@ -94,53 +96,64 @@ public class BidServiceImpl implements BidService {
     @Transactional
     public BidResponse updateStatusById(Long id, String status) {
         Bid bid = findById(id);
+        Post post = bid.getPost();
         User user = jwtService.getUserAuthenticated();
 
-        if (user.getAuthorities().stream().noneMatch((authority -> authority.getAuthority().equals("ROLE_ADMIN")))){
-            if (!bid.getPost().getUser().getId().equals(user.getId())){
-                throw new IllegalArgumentException("Forbidden Action");
+        // Validasi otorisasi
+        if (user.getAuthorities().stream().noneMatch((authority -> authority.getAuthority().equals("ROLE_ADMIN")))) {
+            if (!bid.getPost().getUser().getId().equals(user.getId())) {
+                throw new RuntimeException("Forbidden Action");
             }
         }
 
-
         try {
-            if (BidStatus.ACCEPTED == BidStatus.valueOf(status.toUpperCase())){
+            // Proses status ACCEPTED
+            if (BidStatus.ACCEPTED.equals(BidStatus.valueOf(status.toUpperCase()))) {
                 try {
                     PendingBid pendingBid = PendingBid.builder()
                             .bid(bid)
                             .balance(bid.getAmount())
                             .build();
-
-                    userService.updateBalance(user.getId(), Math.abs(bid.getAmount())*-1);
+                    userService.updateBalance(post.getUser().getId(), Math.abs(bid.getAmount()) * -1);
                     pendingBidService.create(pendingBid);
-                } catch (Exception e){
-                    throw new RuntimeException("Cannot Accept Bid, Balance Not Enough");
+                } catch (Exception e) {
+                    e.printStackTrace(); // Logging error untuk mempermudah debugging
+                    throw new RuntimeException("Cannot Accept Bid, Balance Not Enough", e);
                 }
-
             }
 
-            if (BidStatus.FINISH == BidStatus.valueOf(status.toUpperCase())){
-                if (!bid.getBidStatus().equals(BidStatus.ACCEPTED)){
+            // Proses status FINISH
+            if (BidStatus.FINISH.equals(BidStatus.valueOf(status.toUpperCase()))) {
+                if (!bid.getBidStatus().equals(BidStatus.ACCEPTED)) {
                     throw new IllegalArgumentException("Cannot Change Status to Finish Before Accept Bid");
                 }
                 try {
-                    PendingBid existingPendingBid = bid.getPendingBids().get(0);
+                    List<PendingBid> pendingBids = bid.getPendingBids();
+                    if (pendingBids == null || pendingBids.isEmpty()) {
+                        throw new RuntimeException("No pending bids found for this bid");
+                    }
+                    PendingBid existingPendingBid = pendingBids.get(0);
                     userService.updateBalance(bid.getUser().getId(), bid.getAmount());
                     pendingBidService.delete(existingPendingBid.getId());
-                } catch (Exception e){
-                    throw new RuntimeException("Cannot Finish Bid, Accept First");
+                } catch (Exception e) {
+                    e.printStackTrace(); // Logging untuk error handling
+                    throw new RuntimeException("Cannot Finish Bid, Accept First", e);
                 }
             }
 
+            // Ubah status bid
             BidStatus bidStatus = BidStatus.valueOf(status.toUpperCase());
             bid.setBidStatus(bidStatus);
-        } catch (IllegalArgumentException e){
-            throw new IllegalArgumentException("Invalid status value");
+
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException("Invalid status value", e);
         }
 
+        // Simpan bid yang sudah diperbarui
         Bid updatedBid = bidRepository.save(bid);
         return BidMapper.toBidResponse(updatedBid);
     }
+
 
     @Override
     public Bid findById(Long id) {
@@ -158,6 +171,11 @@ public class BidServiceImpl implements BidService {
     @Override
     public void deleteById(Long id) {
         Bid bid = findById(id);
+
+        if (bid.getBidStatus().equals(BidStatus.ACCEPTED)){
+            throw new RuntimeException("You cannot delete bid when it's already Accepted");
+        }
+
         bidRepository.delete(bid);
     }
 }
