@@ -16,7 +16,7 @@ public interface UserService {
     UserResponse getById(Long id);
     User findById(Long id);
     UserResponse createAdmin(RegisterRequest request);
-    UserResponse updateById(Long id, UserUpdateRequest updatedUser, MultipartFile file);
+    UserResponse updateById(UserUpdateRequest updatedUser, MultipartFile file);
     User updateBalance(Long id, Long amount);
     User getAuthentication();
     User resetPassword(ResetPasswordRequest request);

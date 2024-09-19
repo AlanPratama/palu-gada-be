@@ -10,9 +10,9 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 public class TransactionDetailRequest {
-    @NotBlank(message = "Order id is required")
+    @NotBlank(message = "Order id tidak boleh kosong")
     private String order_id;
 
-    @Min(value = 1, message = "Product id must be at least 1")
+    @Min(value = 1, message = "Amount tidak boleh kurang dari nol")
     private Long gross_amount;
 }

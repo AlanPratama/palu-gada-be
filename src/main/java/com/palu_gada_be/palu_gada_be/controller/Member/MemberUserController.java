@@ -30,14 +30,13 @@ public class MemberUserController {
         );
     }
 
-    @PutMapping("/{id}")
+    @PutMapping
     public ResponseEntity<?> updateUser(
-        @PathVariable Long id,
         @ModelAttribute UserUpdateRequest user,
         @RequestParam(value = "file", required = false) MultipartFile file
     ) {
         return Response.renderJSON(
-            userService.updateById(id, user, file),
+            userService.updateById(user, file),
             "Success Update User",
                 HttpStatus.OK
         );

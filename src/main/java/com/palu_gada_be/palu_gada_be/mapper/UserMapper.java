@@ -14,9 +14,10 @@ public class UserMapper {
 
         return UserResponse.builder()
                 .id(user.getId())
-                .districtId(user.getDistrict() != null ? user.getDistrict().getId() : null) // Handle potential null district
+                .districtId(user.getDistrict() != null ? user.getDistrict().getId() : null)
                 .name(user.getName())
                 .email(user.getEmail())
+                .username(user.getUsername())
                 .photoUrl(user.getPhotoUrl())
                 .userGender(user.getUserGender())
                 .userCategories(user.getUserCategories())

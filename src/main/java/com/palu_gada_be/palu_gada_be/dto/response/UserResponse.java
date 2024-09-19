@@ -16,6 +16,7 @@ public class UserResponse {
     private Long districtId;
     private String name;
     private String email;
+    private String username;
     private String photoUrl;
     private UserGender userGender;
     private List<UserCategory> userCategories;

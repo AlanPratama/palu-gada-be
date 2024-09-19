@@ -96,9 +96,13 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public UserResponse updateById(Long id, UserUpdateRequest updatedUser, MultipartFile file) {
-        User user = findById(id);
-        District district = districtService.getById(updatedUser.getDistrictId());
+    public UserResponse updateById(UserUpdateRequest updatedUser, MultipartFile file) {
+        User user = jwtService.getUserAuthenticated();
+
+        if (updatedUser.getDistrictId() != null){
+            District district = districtService.getById(updatedUser.getDistrictId());
+            user.setDistrict(district);
+        }
 
         if (file != null && !file.isEmpty()) {
             try {
@@ -135,12 +139,25 @@ public class UserServiceImpl implements UserService {
             throw new RuntimeException("Categories not found");
         }
 
-        user.setDistrict(district);
-        user.setPhone(updatedUser.getPhone());
-        user.setAddress(updatedUser.getAddress());
-        user.setName(updatedUser.getName());
-        user.setBirthDate(updatedUser.getBirthDate());
-        user.setUserGender(UserGender.valueOf(updatedUser.getUserGender().toUpperCase()));
+        if (updatedUser.getPhone() != null) {
+            user.setPhone(updatedUser.getPhone());
+        }
+
+        if (updatedUser.getAddress() != null) {
+            user.setAddress(updatedUser.getAddress());
+        }
+
+        if (updatedUser.getName() != null) {
+            user.setName(updatedUser.getName());
+        }
+
+        if (updatedUser.getBirthDate() != null) {
+            user.setBirthDate(updatedUser.getBirthDate());
+        }
+
+        if (updatedUser.getUserGender() != null) {
+            user.setUserGender(UserGender.valueOf(updatedUser.getUserGender().toUpperCase()));
+        }
 
         User updated = userRepository.save(user);
         return UserMapper.toUserResponse(updated);

@@ -2,6 +2,7 @@ package com.palu_gada_be.palu_gada_be.controller.Admin;
 
 import com.palu_gada_be.palu_gada_be.constant.ConstantEndpoint;
 import com.palu_gada_be.palu_gada_be.dto.request.RegisterRequest;
+import com.palu_gada_be.palu_gada_be.dto.request.UserUpdateRequest;
 import com.palu_gada_be.palu_gada_be.service.UserService;
 import com.palu_gada_be.palu_gada_be.util.PageResponse;
 import com.palu_gada_be.palu_gada_be.util.Response;
@@ -11,6 +12,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -51,6 +53,18 @@ public class AdminUserController {
         return Response.renderJSON(
                 userService.getById(id),
                 "Success Get Data User Id: " + id,
+                HttpStatus.OK
+        );
+    }
+
+    @PutMapping
+    public ResponseEntity<?> updateUser(
+            @ModelAttribute UserUpdateRequest user,
+            @RequestParam(value = "file", required = false) MultipartFile file
+    ) {
+        return Response.renderJSON(
+                userService.updateById(user, file),
+                "Success Update User",
                 HttpStatus.OK
         );
     }

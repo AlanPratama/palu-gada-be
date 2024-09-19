@@ -59,6 +59,7 @@ public class User implements UserDetails {
     private Long balance;
 
     @Column(name = "cloudinaryPublicId")
+    @JsonIgnore
     private String cloudinaryPublicId;
 
     @Column(name = "photoUrl")

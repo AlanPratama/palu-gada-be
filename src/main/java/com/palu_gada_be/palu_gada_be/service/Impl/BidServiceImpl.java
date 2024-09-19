@@ -45,9 +45,10 @@ public class BidServiceImpl implements BidService {
             throw new RuntimeException("You can't bid to your own post");
         }
 
-        if (!(request.getAmount() > post.getBudgetMin() && request.getAmount() < post.getBudgetMax())){
+        if (!(request.getAmount() >= post.getBudgetMin() && request.getAmount() <= post.getBudgetMax())){
             throw new RuntimeException("Amount must be in the range budget");
         }
+
 
         Bid bid = Bid.builder()
                 .user(user)

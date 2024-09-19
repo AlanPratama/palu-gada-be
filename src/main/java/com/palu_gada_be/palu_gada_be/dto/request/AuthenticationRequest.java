@@ -9,9 +9,9 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 public class AuthenticationRequest {
-    @NotBlank(message = "Email cannot be empty")
+    @NotBlank(message = "Username/Email tidak boleh kosong")
     private String usernameOrEmail;
 
-    @NotBlank(message = "Password cannot be empty")
+    @NotBlank(message = "Password tidak boleh kosong")
     private String password;
 }
