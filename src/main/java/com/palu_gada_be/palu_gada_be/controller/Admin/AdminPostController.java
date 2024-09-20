@@ -1,6 +1,7 @@
 package com.palu_gada_be.palu_gada_be.controller.Admin;
 
 import com.palu_gada_be.palu_gada_be.constant.ConstantEndpoint;
+import com.palu_gada_be.palu_gada_be.constant.PostStatus;
 import com.palu_gada_be.palu_gada_be.dto.response.PostResponse;
 import com.palu_gada_be.palu_gada_be.service.PostService;
 import com.palu_gada_be.palu_gada_be.util.PageResponse;
@@ -36,14 +37,16 @@ public class AdminPostController {
     })
     @GetMapping
     public ResponseEntity<?> getAll(
-            @Parameter(description = "Filter by post title") @RequestParam(required = false) String title,
-            @Parameter(description = "Filter by district IDs") @RequestParam(required = false) List<Long> districtIds,
-            @Parameter(description = "Field to sort by") @RequestParam(required = false) String sortField,
-            @Parameter(description = "Sort direction, either asc or desc") @RequestParam(required = false) String sortDirection,
+            @RequestParam(required = false) String title,
+            @RequestParam(required = false) List<Long> districtIds,
+            @RequestParam(required = false) PostStatus status,
+            @RequestParam(required = false) List<Long> categoryIds,
+            @RequestParam(required = false) String sortField,
+            @RequestParam(required = false) String sortDirection,
             @PageableDefault Pageable pageable
     ) {
         return Response.renderJSON(
-                new PageResponse<>(postService.getAll(title, districtIds, sortField, sortDirection, pageable)),
+                new PageResponse<>(postService.getAll(title, districtIds, status, categoryIds, sortField, sortDirection, pageable)),
                 "Success Get All Posts",
                 HttpStatus.OK
         );

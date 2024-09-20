@@ -103,9 +103,12 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public Page<PostResponse> getAll(String titleLikeFilter, List<Long> districtIds, String sortField, String sortDirection, Pageable pageable) {
-        Specification<Post> spec = Specification.where(StringUtils.isBlank(titleLikeFilter) ? null : titleLike(titleLikeFilter))
+    public Page<PostResponse> getAll(String titleLikeFilter, List<Long> districtIds, PostStatus statusLikeFilter, List<Long> categoryIds, String sortField, String sortDirection, Pageable pageable) {
+        Specification<Post> spec = Specification
+                .where(StringUtils.isBlank(titleLikeFilter) ? null : titleLike(titleLikeFilter))
                 .and(CollectionUtils.isEmpty(districtIds) ? null : inDistrict(districtIds))
+                .and(statusLikeFilter == null ? null : byPostStatus(statusLikeFilter))
+                .and(CollectionUtils.isEmpty(categoryIds) ? null : byCategoryIds(categoryIds))
                 .and(StringUtils.isBlank(sortField) ? null : sortByField(sortField, sortDirection));
 
         Page<Post> posts = postRepository.findAll(spec, pageable);
@@ -114,11 +117,13 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public Page<PostResponse> getAllByUserId(String titleLikeFilter, String sortField, String sortDirection, Pageable pageable) {
+    public Page<PostResponse> getAllByUserId(String titleLikeFilter, PostStatus statusLikeFilter, List<Long> categoryIds, String sortField, String sortDirection, Pageable pageable) {
         Long id = jwtService.getUserAuthenticated().getId();
 
         Specification<Post> spec = Specification.where(byUserId(id))
                 .and(StringUtils.isBlank(titleLikeFilter) ? null : titleLike(titleLikeFilter))
+                .and(statusLikeFilter == null ? null : byPostStatus(statusLikeFilter))
+                .and(CollectionUtils.isEmpty(categoryIds) ? null : byCategoryIds(categoryIds))
                 .and(StringUtils.isBlank(sortField) ? null : sortByField(sortField, sortDirection));
 
         Page<Post> posts = postRepository.findAll(spec, pageable);

@@ -1,6 +1,7 @@
 package com.palu_gada_be.palu_gada_be.controller.Member;
 
 import com.palu_gada_be.palu_gada_be.constant.ConstantEndpoint;
+import com.palu_gada_be.palu_gada_be.constant.PostStatus;
 import com.palu_gada_be.palu_gada_be.dto.request.PostRequest;
 import com.palu_gada_be.palu_gada_be.dto.response.PostResponse;
 import com.palu_gada_be.palu_gada_be.service.PostService;
@@ -39,13 +40,15 @@ public class MemberPostController {
     public ResponseEntity<?> getAll(
             @RequestParam(required = false) String title,
             @RequestParam(required = false) List<Long> districtIds,
+            @RequestParam(required = false) PostStatus status,
+            @RequestParam(required = false) List<Long> categoryIds,
             @RequestParam(required = false) String sortField,
             @RequestParam(required = false) String sortDirection,
             @PageableDefault Pageable pageable
     ) {
         return Response.renderJSON(
-                new PageResponse<>(postService.getAll(title, districtIds, sortField, sortDirection, pageable)),
-                "Success Get Posts",
+                new PageResponse<>(postService.getAll(title, districtIds, status, categoryIds, sortField, sortDirection, pageable)),
+                "Success Get Post",
                 HttpStatus.OK
         );
     }
@@ -57,13 +60,15 @@ public class MemberPostController {
     @GetMapping("/me")
     public ResponseEntity<?> getUserAllPost(
             @RequestParam(required = false) String title,
+            @RequestParam(required = false) PostStatus status,
+            @RequestParam(required = false) List<Long> categoryIds,
             @RequestParam(required = false) String sortField,
             @RequestParam(required = false) String sortDirection,
             @PageableDefault Pageable pageable
     ) {
         return Response.renderJSON(
-                new PageResponse<>(postService.getAllByUserId(title, sortField, sortDirection, pageable)),
-                "Success Get User Posts",
+                new PageResponse<>(postService.getAllByUserId(title, status, categoryIds, sortField, sortDirection, pageable)),
+                "Success Get Posts",
                 HttpStatus.OK
         );
     }
