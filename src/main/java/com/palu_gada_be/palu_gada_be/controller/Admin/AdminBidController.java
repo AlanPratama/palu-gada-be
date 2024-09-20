@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping(ConstantEndpoint.ADMIN_BID_API)
 @RequiredArgsConstructor
-@Tag(name = "Admin Bid", description = "APIs untuk mengelola lelang oleh admin")
+@Tag(name = "Admin Bid API", description = "APIs untuk mengelola lelang oleh admin")
 @SecurityRequirement(name = "bearerAuth")
 public class AdminBidController {
 
