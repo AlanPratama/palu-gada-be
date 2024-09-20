@@ -10,6 +10,7 @@ import com.palu_gada_be.palu_gada_be.model.District;
 import com.palu_gada_be.palu_gada_be.model.Post;
 import com.palu_gada_be.palu_gada_be.model.PostCategory;
 import com.palu_gada_be.palu_gada_be.model.User;
+import com.palu_gada_be.palu_gada_be.repository.PostCategoryRepository;
 import com.palu_gada_be.palu_gada_be.repository.PostRepository;
 import com.palu_gada_be.palu_gada_be.security.JwtService;
 import com.palu_gada_be.palu_gada_be.service.*;
@@ -43,6 +44,7 @@ public class PostServiceImpl implements PostService {
     private final PostCategoryService postCategoryService;
     private final CategoryService categoryService;
     private final CloudinaryService cloudinaryService;
+    private final PostCategoryRepository postCategoryRepository;
 
     @Override
     @Transactional
@@ -163,29 +165,70 @@ public class PostServiceImpl implements PostService {
     public PostResponse updateById(Long id, PostRequest request, MultipartFile file) {
         Post existingPost = findById(id);
 
-        District newDistrict = districtService.getById(request.getDistrictId());
+        if (request.getDistrictId() != null) {
+            District newDistrict = districtService.getById(request.getDistrictId());
+            existingPost.setDistrict(newDistrict);
+        }
 
-        existingPost.setDistrict(newDistrict);
-        existingPost.setTitle(request.getTitle());
-        existingPost.setDescription(request.getDescription());
-        existingPost.setBudgetMin(request.getBudgetMin());
-        existingPost.setBudgetMax(request.getBudgetMax());
-        existingPost.setFinishDay(request.getFinishDay());
+        if (request.getTitle() != null && !request.getTitle().isEmpty()) {
+            existingPost.setTitle(request.getTitle());
+        }
+
+        if (request.getDescription() != null && !request.getDescription().isEmpty()) {
+            existingPost.setDescription(request.getDescription());
+        }
+
+        if (request.getBudgetMin() != null) {
+            existingPost.setBudgetMin(request.getBudgetMin());
+        }
+
+        if (request.getBudgetMax() != null) {
+            existingPost.setBudgetMax(request.getBudgetMax());
+        }
+
+        if (request.getFinishDay() != null) {
+            existingPost.setFinishDay(request.getFinishDay());
+        }
+
         existingPost.setPostStatus(PostStatus.AVAILABLE);
 
-        if (file != null && !file.isEmpty()){
+        if (request.getCategoriesId() != null) {
+            List<Long> existingCategoryIds = existingPost.getPostCategories().stream()
+                    .map(postCategory -> postCategory.getCategory().getId())
+                    .collect(Collectors.toList());
+
+            List<PostCategory> categoriesToRemove = existingPost.getPostCategories().stream()
+                    .filter(pc -> !request.getCategoriesId().contains(pc.getCategory().getId()))
+                    .collect(Collectors.toList());
+
+            existingPost.getPostCategories().removeAll(categoriesToRemove);
+            postCategoryRepository.deleteAll(categoriesToRemove);
+
+            List<PostCategory> categoriesToAdd = request.getCategoriesId().stream()
+                    .filter(categoryId -> !existingCategoryIds.contains(categoryId))
+                    .map(categoryId -> PostCategory.builder()
+                            .category(categoryService.getById(categoryId))
+                            .post(existingPost)
+                            .build())
+                    .collect(Collectors.toList());
+
+            postCategoryService.createAll(categoriesToAdd);
+            existingPost.getPostCategories().addAll(categoriesToAdd);
+        }
+
+        if (file != null && !file.isEmpty()) {
             try {
                 CloudinaryResponse response = cloudinaryService.uploadFile(file);
                 existingPost.setImageUrl(response.getUrl());
-            } catch (IOException e){
+            } catch (IOException e) {
                 throw new RuntimeException("Failed to upload image", e);
             }
         }
 
         Post savedPost = postRepository.save(existingPost);
-
         return PostMapper.toPostResponse(savedPost);
     }
+
 
     @Override
     public void deleteById(Long id) {

@@ -9,6 +9,7 @@ import com.palu_gada_be.palu_gada_be.dto.response.UserResponse;
 import com.palu_gada_be.palu_gada_be.mapper.UserMapper;
 import com.palu_gada_be.palu_gada_be.model.*;
 import com.palu_gada_be.palu_gada_be.repository.RoleRepository;
+import com.palu_gada_be.palu_gada_be.repository.UserCategoryRepository;
 import com.palu_gada_be.palu_gada_be.repository.UserRepository;
 import com.palu_gada_be.palu_gada_be.security.JwtService;
 import com.palu_gada_be.palu_gada_be.service.*;
@@ -29,6 +30,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import static com.palu_gada_be.palu_gada_be.specification.UserSpecification.*;
 
@@ -44,6 +46,7 @@ public class UserServiceImpl implements UserService {
     private final CategoryService categoryService;
     private final UserCategoyService userCategoyService;
     private final DistrictService districtService;
+    private final UserCategoryRepository userCategoryRepository;
 
     @Override
     public Page<UserResponse> getAll(String nameLikeFilter, List<Long> districtIds, String sortField, String sortDirection, Pageable pageable) {
@@ -100,7 +103,7 @@ public class UserServiceImpl implements UserService {
     public UserResponse updateById(UserUpdateRequest updatedUser, MultipartFile file) {
         User user = jwtService.getUserAuthenticated();
 
-        if (updatedUser.getDistrictId() != null){
+        if (updatedUser.getDistrictId() != null) {
             District district = districtService.getById(updatedUser.getDistrictId());
             user.setDistrict(district);
         }
@@ -123,21 +126,28 @@ public class UserServiceImpl implements UserService {
             }
         }
 
-        List<UserCategory> userCategories = new ArrayList<>();
+        if (updatedUser.getUserCategoriesId() != null) {
+            List<Long> existingCategoryIds = user.getUserCategories().stream()
+                    .map(userCategory -> userCategory.getCategory().getId())
+                    .collect(Collectors.toList());
 
-        try {
-            if (updatedUser.getUserCategoriesId() != null){
-                for (var c : updatedUser.getUserCategoriesId()){
-                    UserCategory temp = UserCategory.builder()
-                            .category(categoryService.getById(c))
+            List<UserCategory> categoriesToRemove = user.getUserCategories().stream()
+                    .filter(uc -> !updatedUser.getUserCategoriesId().contains(uc.getCategory().getId()))
+                    .collect(Collectors.toList());
+
+            user.getUserCategories().removeAll(categoriesToRemove);
+            userCategoryRepository.deleteAll(categoriesToRemove);
+
+            List<UserCategory> categoriesToAdd = updatedUser.getUserCategoriesId().stream()
+                    .filter(categoryId -> !existingCategoryIds.contains(categoryId))
+                    .map(categoryId -> UserCategory.builder()
+                            .category(categoryService.getById(categoryId))
                             .user(user)
-                            .build();
-                    userCategories.add(temp);
-                }
-                userCategoyService.createAll(userCategories);
-            }
-        } catch (Exception ex){
-            throw new RuntimeException("Categories not found");
+                            .build())
+                    .collect(Collectors.toList());
+
+            userCategoyService.createAll(categoriesToAdd);
+            user.getUserCategories().addAll(categoriesToAdd);
         }
 
         if (updatedUser.getPhone() != null) {
@@ -163,6 +173,7 @@ public class UserServiceImpl implements UserService {
         User updated = userRepository.save(user);
         return UserMapper.toUserResponse(updated);
     }
+
 
     @Override
     @Transactional(propagation = Propagation.REQUIRES_NEW)

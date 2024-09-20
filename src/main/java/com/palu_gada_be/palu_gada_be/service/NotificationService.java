@@ -13,5 +13,6 @@ public interface NotificationService {
     Page<NotificationResponse> getByUserAuthenticated(Pageable pageable);
     Notification findById(Long id);
     NotificationResponse getById(Long id);
+    void updateIsReadByUser();
     void deleteById(Long id);
 }

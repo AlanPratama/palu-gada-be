@@ -77,6 +77,18 @@ public class NotificationServiceImpl implements NotificationService {
     }
 
     @Override
+    public void updateIsReadByUser() {
+        Long userId = jwtService.getUserAuthenticated().getId();
+
+        List<Notification> notifications = notificationRepository.findByUserId(userId);
+
+        notifications.forEach(notification -> notification.setIsRead(true));
+
+        notificationRepository.saveAll(notifications);
+    }
+
+
+    @Override
     public void deleteById(Long id) {
         Notification notification = findById(id);
 

@@ -109,6 +109,21 @@ public class MemberNotificationController {
         );
     }
 
+    @Operation(summary = "Mark all notifications as read", description = "Mark all notifications for the authenticated user as read.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully marked notifications as read"),
+            @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content)
+    })
+    @PutMapping("/me/read")
+    public ResponseEntity<?> markAllNotificationsAsRead() {
+        notificationService.updateIsReadByUser();
+        return Response.renderJSON(
+                null,
+                "Success Mark All Notifications as Read",
+                HttpStatus.OK
+        );
+    }
+
     @Operation(summary = "Delete notification by ID", description = "Delete a notification by its ID.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "Successfully deleted notification"),
