@@ -1,5 +1,6 @@
 package com.palu_gada_be.palu_gada_be.service;
 
+import com.palu_gada_be.palu_gada_be.constant.PostStatus;
 import com.palu_gada_be.palu_gada_be.dto.request.PostRequest;
 import com.palu_gada_be.palu_gada_be.dto.response.PostResponse;
 import com.palu_gada_be.palu_gada_be.model.Post;
@@ -11,8 +12,8 @@ import java.util.List;
 
 public interface PostService {
     PostResponse create(PostRequest request, MultipartFile file);
-    Page<PostResponse> getAll(String titleLikeFilter, List<Long> districtId, String sortField, String sortDirection, Pageable pageable);
-    Page<PostResponse> getAllByUserId(String titleLikeFilter, String sortField, String sortDirection, Pageable pageable);
+    Page<PostResponse> getAll(String titleLikeFilter, List<Long> districtIds, PostStatus statusLikeFilter, List<Long> categoryIds, String sortField, String sortDirection, Pageable pageable);
+    Page<PostResponse> getAllByUserId(String titleLikeFilter, PostStatus statusLikeFilter, List<Long> categoryIds, String sortField, String sortDirection, Pageable pageable);
     PostResponse getById(Long id);
     PostResponse updateStatusPost(Long id, String status);
     Post findById(Long id);

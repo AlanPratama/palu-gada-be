@@ -1,7 +1,7 @@
 package com.palu_gada_be.palu_gada_be.controller.Admin;
 
 import com.palu_gada_be.palu_gada_be.constant.ConstantEndpoint;
-import com.palu_gada_be.palu_gada_be.dto.request.PostRequest;
+import com.palu_gada_be.palu_gada_be.constant.PostStatus;
 import com.palu_gada_be.palu_gada_be.service.PostService;
 import com.palu_gada_be.palu_gada_be.util.PageResponse;
 import com.palu_gada_be.palu_gada_be.util.Response;
@@ -11,7 +11,6 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -26,12 +25,14 @@ public class AdminPostController {
     public ResponseEntity<?> getAll(
             @RequestParam(required = false) String title,
             @RequestParam(required = false) List<Long> districtIds,
+            @RequestParam(required = false) PostStatus status,
+            @RequestParam(required = false) List<Long> categoryIds,
             @RequestParam(required = false) String sortField,
             @RequestParam(required = false) String sortDirection,
             @PageableDefault Pageable pageable
     ) {
         return Response.renderJSON(
-                new PageResponse<>(postService.getAll(title, districtIds, sortField, sortDirection, pageable)),
+                new PageResponse<>(postService.getAll(title, districtIds, status, categoryIds, sortField, sortDirection, pageable)),
                 "Success Get All Posts",
                 HttpStatus.OK
         );
