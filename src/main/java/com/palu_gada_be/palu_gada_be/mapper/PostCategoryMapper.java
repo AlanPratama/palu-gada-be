@@ -9,7 +9,7 @@ import lombok.Data;
 public class PostCategoryMapper {
     public static PostCategoryResponse toPostCategoryResponse(PostCategory postCategory){
         return PostCategoryResponse.builder()
-                .id(postCategory.getId())
+                .id(postCategory.getCategory().getId())
                 .category(postCategory.getCategory().getName())
                 .createdAt(DateTimeUtil.convertLocalDateTimeToString(postCategory.getCreatedAt(), "yyyy-MM-dd HH:mm:ss"))
                 .updatedAt(DateTimeUtil.convertLocalDateTimeToString(postCategory.getUpdatedAt(), "yyyy-MM-dd HH:mm:ss"))
