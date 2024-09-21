@@ -34,7 +34,7 @@ public class PayoutServiceImpl implements PayoutService {
             throw new IllegalArgumentException("Balance tidak mencukupi untuk melakukan payout.");
         }
 
-        userService.updateBalance(user.getId(), Math.abs(user.getBalance() - request.getAmount()) * -1);
+        userService.updateBalance(user.getId(), Math.abs(request.getAmount()) * -1);
 
         Payout payout = Payout.builder()
                 .user(user)
