@@ -162,6 +162,14 @@ public class UserServiceImpl implements UserService {
             user.setName(updatedUser.getName());
         }
 
+        if (updatedUser.getNik() != null) {
+            user.setNik(updatedUser.getNik());
+        }
+
+        if (updatedUser.getBankAccount() != null) {
+            user.setBankAccount(updatedUser.getBankAccount());
+        }
+
         if (updatedUser.getBirthDate() != null) {
             user.setBirthDate(updatedUser.getBirthDate());
         }

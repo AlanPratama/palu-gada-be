@@ -32,5 +32,12 @@ public class UserUpdateRequest {
     @Pattern(regexp = "^(Male|Female|other)$", message = "Jenis Kelamin harus Male dan Female")
     private String userGender;
 
+    @NotBlank(message = "NIK tidak boleh kosong")
+    private String nik;
+
+    @NotBlank(message = "Bank Account tidak boleh kosong")
+    private String bankAccount;
+
+
     private List<Long> userCategoriesId;
 }
