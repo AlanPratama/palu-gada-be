@@ -154,6 +154,10 @@ public class UserServiceImpl implements UserService {
             user.setPhone(updatedUser.getPhone());
         }
 
+        if (updatedUser.getAbout() != null) {
+            user.setAbout(updatedUser.getAbout());
+        }
+
         if (updatedUser.getAddress() != null) {
             user.setAddress(updatedUser.getAddress());
         }

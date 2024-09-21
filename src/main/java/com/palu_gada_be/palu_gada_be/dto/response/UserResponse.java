@@ -17,6 +17,9 @@ public class UserResponse {
     private String name;
     private String email;
     private String phone;
+    private String nik;
+    private String about;
+    private String bankAccount;
     private String username;
     private String photoUrl;
     private UserGender userGender;

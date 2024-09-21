@@ -12,6 +12,7 @@ import com.palu_gada_be.palu_gada_be.security.JwtService;
 import com.palu_gada_be.palu_gada_be.service.BidService;
 import com.palu_gada_be.palu_gada_be.service.PostService;
 import com.palu_gada_be.palu_gada_be.service.ReviewService;
+import com.palu_gada_be.palu_gada_be.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
@@ -31,20 +32,30 @@ public class ReviewServiceImpl implements ReviewService {
     private final ReviewRepository reviewRepository;
     private final JwtService jwtService;
     private final PostService postService;
+    private final UserService userService;
     private final BidService bidService;
 
     @Override
     public ReviewResponse create(ReviewRequest request) {
         User user = jwtService.getUserAuthenticated();
+        User worker = userService.findById(request.getUserId());
         Post post = postService.findById(request.getPostId());
 
-        if (post.getBids().stream().noneMatch((bid) -> (bid.getUser().getId().equals(user.getId())) && (bid.getBidStatus().equals(BidStatus.FINISH))))
-        {
-            throw new RuntimeException("You cannot create review when you are not bid post and finish bid");
+//        if (post.getBids().stream().noneMatch((bid) -> (bid.getUser().getId().equals(user.getId())) && (bid.getBidStatus().equals(BidStatus.FINISH))))
+//        {
+//            throw new RuntimeException("You cannot create review when you are not bid post and finish bid");
+//        }
+
+        if (!post.getUser().getId().equals(user.getId())){
+            throw new RuntimeException("You cannot create review when it's not your own post");
+        }
+
+        if (post.getBids().stream().noneMatch(bid -> bid.getUser().getId().equals(worker.getId()) && bid.getBidStatus().equals(BidStatus.FINISH))){
+            throw new RuntimeException("You cannot create review while not finish bid");
         }
 
         Review newReview = Review.builder()
-                .user(user)
+                .user(worker)
                 .post(post)
                 .rating(request.getRating())
                 .comment(request.getComment())
@@ -106,7 +117,7 @@ public class ReviewServiceImpl implements ReviewService {
         Review review = findById(id);
         User user = jwtService.getUserAuthenticated();
 
-        if (!user.getId().equals(review.getUser().getId())){
+        if (!user.getId().equals(review.getPost().getUser().getId())){
             throw new RuntimeException("Forbidden Action");
         }
 

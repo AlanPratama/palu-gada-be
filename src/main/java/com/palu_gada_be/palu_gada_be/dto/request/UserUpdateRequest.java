@@ -22,6 +22,10 @@ public class UserUpdateRequest {
     @Size(max = 255, message = "Alamat tidak boleh lebih dari 255 karakter")
     private String address;
 
+    @Size(max = 255, message = "About me tidak boleh lebih dari 255 karakter")
+    private String about;
+
+
     @NotBlank(message = "Nama tidak boleh kosong")
     @Size(max = 100, message = "Nama tidak boleh lebih dari 100 karakter")
     private String name;

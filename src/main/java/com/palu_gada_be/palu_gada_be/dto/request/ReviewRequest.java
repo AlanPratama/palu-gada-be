@@ -18,6 +18,9 @@ public class ReviewRequest {
     @NotNull(message = "Post ID tidak boleh kosong")
     private Long postId;
 
+    @NotNull(message = "User ID tidak boleh kosong")
+    private Long userId;
+
     @NotNull(message = "Rating tidak boleh kosong")
     @Min(value = 1, message = "Rating minimal adalah 1")
     @Max(value = 5, message = "Rating maksimal adalah 5")
