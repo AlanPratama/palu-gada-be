@@ -75,6 +75,22 @@ public class MemberReviewController {
         );
     }
 
+    @Operation(summary = "Get reviews by user ID", description = "Retrieve all reviews for a specific user.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully retrieved reviews", content = @Content(mediaType = "application/json", schema = @Schema(implementation = PageResponse.class)))
+    })
+    @GetMapping("/user/{id}")
+    public ResponseEntity<?> getByUserxId(
+            @PathVariable Long id,
+            @PageableDefault Pageable pageable
+    ) {
+        return Response.renderJSON(
+                new PageResponse<>(reviewService.getByUserId(id, pageable)),
+                "Success Get Reviews By User Id",
+                HttpStatus.OK
+        );
+    }
+
     @Operation(summary = "Get reviews by authenticated user", description = "Retrieve all reviews created by the authenticated user.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successfully retrieved reviews", content = @Content(mediaType = "application/json", schema = @Schema(implementation = PageResponse.class)))
