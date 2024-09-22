@@ -135,7 +135,7 @@ public class ReviewServiceImpl implements ReviewService {
         User user = jwtService.getUserAuthenticated();
 
         if (!review.getUser().getId().equals(user.getId())
-//                && user.getAuthorities().stream().noneMatch((authority) -> authority.getAuthority().equals("ROLE_ADMIN"))
+                || user.getAuthorities().stream().noneMatch((authority) -> authority.getAuthority().equals("ROLE_ADMIN"))
         ){
             throw new RuntimeException("You cannot delete review when its not yours");
         }
