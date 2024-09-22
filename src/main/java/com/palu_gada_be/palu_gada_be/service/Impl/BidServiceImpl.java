@@ -108,10 +108,8 @@ public class BidServiceImpl implements BidService {
         User user = jwtService.getUserAuthenticated();
 
         // Validasi otorisasi
-        if (user.getAuthorities().stream().noneMatch((authority -> authority.getAuthority().equals("ROLE_ADMIN")))) {
-            if (!bid.getPost().getUser().getId().equals(user.getId())) {
-                throw new RuntimeException("Forbidden Action");
-            }
+        if (user.getAuthorities().stream().noneMatch((authority -> authority.getAuthority().equals("ROLE_ADMIN"))) || !bid.getPost().getUser().getId().equals(user.getId())) {
+            throw new RuntimeException("Forbidden Action");
         }
 
         try {
