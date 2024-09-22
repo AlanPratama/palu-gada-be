@@ -108,6 +108,23 @@ public class MemberPostController {
         );
     }
 
+    @Operation(summary = "Delete post", description = "delete the post by its ID.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully deleted post", content = @Content(mediaType = "application/json", schema = @Schema(implementation = PostResponse.class))),
+            @ApiResponse(responseCode = "404", description = "Post not found", content = @Content)
+    })
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> delete(
+            @PathVariable Long id
+    ) {
+        postService.deleteById(id);
+        return Response.renderJSON(
+                id,
+                "Success Delete Post",
+                HttpStatus.OK
+        );
+    }
+
     @Operation(summary = "Update post status", description = "Update the status of a post by its ID.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successfully updated post status", content = @Content(mediaType = "application/json", schema = @Schema(implementation = PostResponse.class))),
