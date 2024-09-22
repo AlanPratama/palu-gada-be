@@ -4,6 +4,7 @@ import com.palu_gada_be.palu_gada_be.constant.BidStatus;
 import com.palu_gada_be.palu_gada_be.dto.request.ReviewRequest;
 import com.palu_gada_be.palu_gada_be.dto.response.ReviewResponse;
 import com.palu_gada_be.palu_gada_be.mapper.ReviewMapper;
+import com.palu_gada_be.palu_gada_be.model.Bid;
 import com.palu_gada_be.palu_gada_be.model.Post;
 import com.palu_gada_be.palu_gada_be.model.Review;
 import com.palu_gada_be.palu_gada_be.model.User;
@@ -22,6 +23,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.palu_gada_be.palu_gada_be.specification.ReviewSpecification.*;
 
@@ -60,6 +62,14 @@ public class ReviewServiceImpl implements ReviewService {
                 .rating(request.getRating())
                 .comment(request.getComment())
                 .build();
+
+        Bid searchBid = post.getBids().stream().filter(bid -> bid.getUser().getId().equals(worker.getId())).toList().get(0);
+
+        try {
+            bidService.updateStatusById(searchBid.getId(), "REVIEWED");
+        } catch (Exception ex){
+            throw new RuntimeException("Forbidden Action");
+        }
 
         Review createdReview = reviewRepository.save(newReview);
 
@@ -139,7 +149,7 @@ public class ReviewServiceImpl implements ReviewService {
                 throw new RuntimeException("You cannot delete review when its not yours");
             }
         }
-        
+
         reviewRepository.delete(findById(id));
     }
 }
