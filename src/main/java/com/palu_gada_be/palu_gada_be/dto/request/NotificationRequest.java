@@ -26,7 +26,7 @@ public class NotificationRequest {
     @NotNull(message = "Status dibaca tidak boleh kosong.")
     private Boolean isRead;
 
-    @Pattern(regexp = "^(https?|ftp)://.*$", message = "Ikon harus berupa URL yang valid.")
+//    @Pattern(regexp = "^(https?|ftp)://.*$", message = "Ikon harus berupa URL yang valid.")
     private String icon;
 }
 

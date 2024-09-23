@@ -12,7 +12,7 @@ public class NotificationMapper {
                 .id(notification.getId())
                 .user(UserMapper.toUserResponse(notification.getUser()))
                 .title(notification.getTitle())
-                .description(notification.getTitle())
+                .description(notification.getDescription())
                 .isRead(notification.getIsRead())
                 .icon(notification.getIcon())
                 .createdAt(DateTimeUtil.convertLocalDateTimeToString(notification.getCreatedAt(), "yyyy-MM-dd HH:mm:ss"))
