@@ -192,4 +192,10 @@ public class BidServiceImpl implements BidService {
 
         bidRepository.delete(bid);
     }
+
+    @Override
+    public Long countManyUserWorking() {
+        Long userId = jwtService.getUserAuthenticated().getId();
+        return bidRepository.countManyUserWorking(userId);
+    }
 }

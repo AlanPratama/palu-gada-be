@@ -126,4 +126,18 @@ public class MemberBidController {
                 "Success Delete Bid"
         );
     }
+
+    @Operation(summary = "Get all many user accepted bid", description = "get count accepted bid by the authenticated user.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully retrieved many user working", content = @Content(mediaType = "application/json")),
+            @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content)
+    })
+    @GetMapping("/count-accepted")
+    public ResponseEntity<?> getCountUserAcceptedBid() {
+        return Response.renderJSON(
+                bidService.countManyUserWorking(),
+                "Success Get Many User Working",
+                HttpStatus.OK
+        );
+    }
 }
