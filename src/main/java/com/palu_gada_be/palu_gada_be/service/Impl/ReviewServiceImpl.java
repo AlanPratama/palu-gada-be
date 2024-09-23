@@ -68,7 +68,7 @@ public class ReviewServiceImpl implements ReviewService {
         try {
             bidService.updateStatusById(searchBid.getId(), "REVIEWED");
         } catch (Exception ex){
-            throw new RuntimeException("Forbidden Action");
+            throw new RuntimeException("Something wrong happen when reviewing bid");
         }
 
         Review createdReview = reviewRepository.save(newReview);
