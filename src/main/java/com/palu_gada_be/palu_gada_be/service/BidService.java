@@ -17,4 +17,5 @@ public interface BidService {
     Bid findById(Long id);
     BidResponse getById(Long id);
     void deleteById(Long id);
+    Long countManyUserWorking();
 }

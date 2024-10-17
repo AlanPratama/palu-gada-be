@@ -80,7 +80,7 @@ public class MemberReviewController {
             @ApiResponse(responseCode = "200", description = "Successfully retrieved reviews", content = @Content(mediaType = "application/json", schema = @Schema(implementation = PageResponse.class)))
     })
     @GetMapping("/user/{id}")
-    public ResponseEntity<?> getByUserxId(
+    public ResponseEntity<?> getByUserId(
             @PathVariable Long id,
             @PageableDefault Pageable pageable
     ) {

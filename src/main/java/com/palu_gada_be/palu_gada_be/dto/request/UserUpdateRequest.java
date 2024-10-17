@@ -39,7 +39,7 @@ public class UserUpdateRequest {
     @NotBlank(message = "NIK tidak boleh kosong")
     private String nik;
 
-    @NotBlank(message = "Bank Account tidak boleh kosong")
+//    @NotBlank(message = "Bank Account tidak boleh kosong")
     private String bankAccount;
 
 

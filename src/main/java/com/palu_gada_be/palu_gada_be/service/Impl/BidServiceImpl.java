@@ -108,8 +108,10 @@ public class BidServiceImpl implements BidService {
         User user = jwtService.getUserAuthenticated();
 
         // Validasi otorisasi
-        if (user.getAuthorities().stream().noneMatch((authority -> authority.getAuthority().equals("ROLE_ADMIN"))) || !bid.getPost().getUser().getId().equals(user.getId())) {
-            throw new RuntimeException("Forbidden Action");
+        if (user.getAuthorities().stream().noneMatch((authority -> authority.getAuthority().equals("ROLE_ADMIN")))) {
+            if (!bid.getPost().getUser().getId().equals(user.getId())){
+                throw new RuntimeException("Forbidden Action");
+            }
         }
 
         try {
@@ -144,6 +146,12 @@ public class BidServiceImpl implements BidService {
                 } catch (Exception e) {
                     e.printStackTrace();
                     throw new RuntimeException("Cannot Finish Bid, Accept First", e);
+                }
+            }
+
+            if (BidStatus.REVIEWED.equals(BidStatus.valueOf(status.toUpperCase()))){
+                if (!bid.getBidStatus().equals(BidStatus.FINISH)) {
+                    throw new IllegalArgumentException("Cannot Reviewed before finish bid");
                 }
             }
 
@@ -183,5 +191,11 @@ public class BidServiceImpl implements BidService {
         }
 
         bidRepository.delete(bid);
+    }
+
+    @Override
+    public Long countManyUserWorking() {
+        Long userId = jwtService.getUserAuthenticated().getId();
+        return bidRepository.countManyUserWorking(userId);
     }
 }
